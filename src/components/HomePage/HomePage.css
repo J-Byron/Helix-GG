@@ -1,0 +1,105 @@
+
+@import url(//db.onlinewebfonts.com/c/736cf5b08b01082a3645e14038868e20?family=Krungthep);
+
+.DisplayText {
+    cursor: default;
+    color: #363636;
+    display: inline-block;
+    font-family: 'Krungthep';
+    font-size: 11vw;
+    margin: 200px 25% 0px 25%;
+    text-align: center;
+    width: 50%;
+}
+
+.searchBar {
+    height: 50px;
+    margin: 20px 25% 0px 25%;
+    width: 50%;
+    border-radius: 3px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+}
+
+.searchForm {
+    color: #363636;
+    font-size:16px;
+    line-height:1.5;
+    font-weight:800;
+    font-family: Arial, Helvetica, sans-serif;
+    text-indent:12px;
+    width:100%;
+    height:32px;
+    border-radius: 3px;
+    border:0px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.searchButton {
+    width: 70px ;
+    height: 30px;
+    background-color: #0CA5B0;
+    cursor: pointer;
+    border-radius: 2px;
+    display: flex;
+    margin-right: 10px;
+
+    color: white;
+    font-weight:800;
+    font-family: 'Krungthep';
+    font-size: 23px;
+
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0px 2px #00737a;
+}
+
+.searchButton:hover {
+    background-color: #0A939C;
+}
+
+.searchButton:active {
+    transform: translateY(2px);
+}
+
+
+/* Highlight effect on search From */
+input[type=text], .searchBar {
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+    outline: none;
+    border: 1px solid #ffffff;
+  }
+
+  input[type=text]:focus + .searchBar {
+    box-shadow: 0 0 5px #0CA5B0;
+    border: 1px solid #0CA5B0;
+  }
+  /* 0CA5B0  rgba(81, 203, 238, 1)*/
+
+
+/* Media Queries for mobile devices */
+@media only screen and (max-width: 480px) {
+   
+    .searchBar {
+        height: 36px;
+        margin: 20px 15% 0px 15%;
+        width: 70%;
+    
+    }
+    
+    .DisplayText {
+        color: #363636;
+        display: inline-block;
+        font-family: 'Krungthep';
+        font-size: 50px;
+        margin: 200px 25% 0px 25%;
+        text-align: center;
+        width: 50%;
+    }
+}
