@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {Route} from 'react-router-dom'
 import {connect} from 'react-redux';
@@ -35,11 +36,13 @@ const ProtectedRoute = (props) => {
     // if they are not logged in, check the loginMode on Redux State
     // if the mode is 'login', show the LoginPage
     ComponentToShow = LoginPage;
-  } else {
-    // the the user is not logged in and the mode is not 'login'
-    // show the RegisterPage
-    ComponentToShow = RegisterPage;
-  }
+  } 
+
+  // else {
+  //   // the the user is not logged in and the mode is not 'login'
+  //   // show the RegisterPage
+  //   ComponentToShow = RegisterPage;
+  // }
 
   // We return a Route component that gets added to our list of routes
   return (
@@ -64,5 +67,3 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps)(ProtectedRoute)
-
-

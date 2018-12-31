@@ -1,4 +1,8 @@
+// *----------* Create App *----------*
 import React, { Component } from 'react';
+import './App.css';
+
+// *----------* Router *----------*
 import {
   HashRouter as Router,
   Route,
@@ -6,18 +10,19 @@ import {
   Switch,
 } from 'react-router-dom';
 
+// *----------* Redux *----------*
 import { connect } from 'react-redux';
 
+// *----------* Page Components *----------*
 import Nav from '../Nav/Nav';
+import HomePage from '../HomePage/HomePage'
 import Footer from '../Footer/Footer';
 
-import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'
-
+// Consider Deleting
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import AboutPage from '../AboutPage/AboutPage';
 import UserPage from '../UserPage/UserPage';
 import InfoPage from '../InfoPage/InfoPage';
-
-import './App.css';
 
 class App extends Component {
   componentDidMount() {
@@ -32,12 +37,8 @@ class App extends Component {
           <Switch>
             {/* Visiting localhost:3000 will redirect to localhost:3000/home*/}
             <Redirect exact from="/" to="/home" />
-
-            <Route
-              exact
-              path="/about"
-              component={AboutPage}
-            />
+            
+            <Route path='/home' component={HomePage}/>
             
           </Switch>
           <Footer />
