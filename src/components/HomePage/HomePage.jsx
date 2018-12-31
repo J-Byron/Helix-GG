@@ -1,12 +1,10 @@
 // *----------* Create React *----------*
 import React, { Component } from 'react';
 import './HomePage.css';
+
 // *----------* Redux *----------*
 import { connect } from 'react-redux';
 import axios from 'axios';
-
-// *----------*  *----------*
-require('dotenv').config()
 
 // const themes = {
 //     light:{
@@ -43,23 +41,26 @@ class HomePage extends Component {
 
     handleSubmissionClick = () => {
 
-        // regular expression use to validate summoner names
+        // Validate query
+
+        // regular expression use to validate summoner names 
+        //          *** NOT OPTIMIZED FOR JS YET ***
         // const regex = RegExp('^[-\w\.\$@\*\!]{1,16}$');
         // const nameIsValidated = regex.test(this.state.usernameInput);
+
+        // create query object
         const queryParameters = { summonerName: this.state.usernameInput, region: this.state.selectedRegion }
 
-        // this.props.dispatch({type:'QUERY_SUMMONER',payload:query})
+        // Dispatch query to redux --> API Requests need to be made on server side because of CORS & process.env only accessible in node
         console.log('Preparing to dispatch', queryParameters);
-        console.log(process.env);
+        this.props.dispatch({ type: 'QUERY_SUMMONER', payload: queryParameters })
 
-        // Request needs to be made on server side because of CORS, process.env only accessible in node
-        const queryString = `https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${queryParameters.summonerName}?api_key=RGAPI-08642ef3-71ec-4f3d-a037-9dec1b831e65`;
-        axios.get(queryString).then(response =>{
-            console.log(response);
-        }).catch(err =>{
-            console.log(err);
-        })
-
+        // Clear input field
+        this.setState(
+            {
+                usernameInput: ''
+            }
+        )
     }
 
     render() {
