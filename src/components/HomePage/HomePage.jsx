@@ -53,7 +53,7 @@ class HomePage extends Component {
 
         // Dispatch query to redux --> API Requests need to be made on server side because of CORS & process.env only accessible in node
         console.log('Preparing to dispatch', queryParameters);
-        this.props.dispatch({ type: 'QUERY_SUMMONER', payload: queryParameters })
+        this.props.dispatch({ type: 'FETCH_SUMMONER', payload: queryParameters })
 
         // Clear input field
         this.setState(
