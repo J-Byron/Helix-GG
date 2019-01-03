@@ -26,15 +26,15 @@ router.get('/:region/:summonerName', (req,res)=>{
         level: '',  //  1-999
         rank: '',   // unranked-challenger
         icon: '',   // .png
-        winrate:'', // Winrate for past 20 games
+        winrate: {normal:'',ranked:''}, // Winrate for past 20 games
         KDA: {normal:{kills:0, deaths: 0, assists: 0, kda:0}, ranked: {kills:0, deaths: 0, assists: 0, kda:0}},  
         top3ChampData: {normal: [],ranked:[]},  // KDA & WR for top 3 champs along with icon 
         championData: [],                       // Top 10 ranked champs [{champion icon, win rate, averages cs, kda }]
-        matchHistory: {normal:[], ranked:[]},   // [{matchid, champion icon, result, cs, kda, build, date}]
+        matchHistory: {normal:[], ranked:[]},   // [{matchid, build, champion icon, cs, date, result, kda, [teammates]}]
     }
 
     /* 
-        Queue Types
+        -Queue Types-
 
         400: Draft 
         420: Ranked
@@ -43,18 +43,17 @@ router.get('/:region/:summonerName', (req,res)=>{
         850: Intermediate Bots
         840: Beginner Bots   
         
-        Rate Limits
+        -Rate Limits-
 
+        'x-app-rate-limit': '20:1,100:120',
+        'x-method-rate-limit': '1000:10',
 
-        Request rates
+        -Request rates-
+
         Summoner name - 1
         Summoner Rank - 1
         Match History = (1 + 20) + (1 + 20) = 42
 
-        'x-app-rate-limit': '20:1,100:120',
-        'x-app-rate-limit-count': '3:1,3:120',
-        'x-method-rate-limit': '1000:10',
-        'x-method-rate-limit-count': '1:10',
     */
 
 
@@ -81,40 +80,50 @@ router.get('/:region/:summonerName', (req,res)=>{
                 }
             });
         }).catch(error=>{
-            console.log(error);
+            console.log(error.response);
             res.sendStatus(400);
         })
 
         // Query ranked solo queue match history
-        axios.get(`https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/${summonerIDs.accountId}?queue=420&endIndex=20&beginIndex=0&api_key=${API_KEY}`)
+        axios.get(`https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/${summonerIDs.accountId}?queue=420&endIndex=5&beginIndex=0&api_key=${API_KEY}`)
         .then(response =>{
-
-            console.log(
-            `Rate limits: 
-                App-- limit: [${response.headers["x-app-rate-limit"]}] count: [${response.headers["x-app-rate-limit-count"]}]
-                Method-- limit: [${response.headers["x-method-rate-limit"]}] count: [${response.headers["x-method-rate-limit-count"]}]`
-            );
-
 
             // Query data for each individual match of matchlist with gameID
             for (let match of response.data.matches){
-                // 
                 axios.get(`https://na1.api.riotgames.com/lol/match/v4/matches/${match.gameId}?api_key=${API_KEY}`)
                 .then(response =>{
+
+
                     const matchData = response.data;
-                    let teammates = [];
-                    // console.log(response.data);
-                    // console.log(matchData.participantIdentities);
-                    // console.log(`${matchData.participantIdentities}`);
+                    let matchParticipantId;
+                    let matchParticipantNames;
+
+                    // find summoner participant id -> find build, find match result, find teammates
+
+                    // find summoner participant id & match player names
                     for(let participant of matchData.participantIdentities){
-                        console.log(`ParticipantId: ${participant} SummonerName: `);
+                        if(summonerName.toUpperCase() ===  participant.player.summonerName.toUpperCase()){
+                            
+                            // get the matchParticipant id of the queried summoner in particular match
+                            matchParticipantId = participant.participantId;
+
+                            // Determine participants of match (excluding queried Summoner)
+                            matchParticipantNames = matchData.participantIdentities.filter(participant => {
+                                return participant.participantId != matchParticipantId
+                            }).map(participant => participant.player.summonerName)
+                            
+                            break;
+                        }
                     }
+
                     console.log(`@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@`)
+                }).catch(error => {
+                    console.log(error.response);
                 })
             }
 
         }).catch(error=>{
-            console.log(error);
+            console.log(error.response);
         })
 
         // Query normal queue match history
@@ -138,9 +147,17 @@ router.get('/:region/:summonerName', (req,res)=>{
         // Query matchlist by accountID
             // Calculate winrate, KDA, and top3ChampionData
             // query each match and update each matchhistory with relevant data from each match
+
+            console.log(
+                `Rate limits: 
+                    App-- limit: [${response.headers["x-app-rate-limit"]}] count: [${response.headers["x-app-rate-limit-count"]}]
+                    Method-- limit: [${response.headers["x-method-rate-limit"]}] count: [${response.headers["x-method-rate-limit-count"]}]
+                    `
+                );
+
     }).catch(error=>{
         // res.send({didSucceed: false, data: null})\
-        console.log(error);
+        console.log(error.response);
         res.sendStatus(400);
     })
 
