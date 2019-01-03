@@ -4,7 +4,6 @@ import './HomePage.css';
 
 // *----------* Redux *----------*
 import { connect } from 'react-redux';
-import axios from 'axios';
 
 // const themes = {
 //     light:{
