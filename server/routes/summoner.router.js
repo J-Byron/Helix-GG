@@ -64,11 +64,11 @@ axios.get(`http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/data/en_US/champi
 axios.get(`http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/data/en_US/summoner.json`).then(response => {
     const spellData = response.data.data;
 
-    for (const spell in spellData){
+    for (const spell in spellData) {
         spells[spellData[spell].key] = spellData[spell].image.full;
     }
 
-}).catch(error =>{
+}).catch(error => {
     console.log(error);
 })
 
@@ -77,17 +77,15 @@ axios.get(`http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/data/en_US/summon
 // http://ddragon.leagueoflegends.com/cdn/8.24.1/data/en_US/runesReforged.json by id grab icon path ->  
 // http://ddragon.leagueoflegends.com/cdn/img/ + perk-images/Styles/7200_Domination.png
 
-
-
 axios.get(`http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/data/en_US/runesReforged.json`).then(response => {
     const runeData = response.data;
 
-    for (const keystone in runeData){
+    for (const keystone in runeData) {
         keystoneRunes[runeData[keystone].id] = runeData[keystone].icon;
         // spel[spellData[spell].key] = spellData[spell].image.full;
     }
 
-}).catch(error =>{
+}).catch(error => {
     console.log(error);
 })
 
@@ -96,7 +94,56 @@ axios.get(`http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/data/en_US/runesR
 
 // *----------* Routes *----------*
 
+// Endpoint for header Data
 router.get('/:region/:summonerName', (req, res) => {
+
+    // Prepare data from request params
+    const region = req.params.region;
+    const summonerName = req.params.summonerName;
+
+    // Data to be sent to client and used to render header
+    let data = {};
+
+    // Query riotgames for summoner by summoner name 
+    axios.get(`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}?api_key=${API_KEY}`).then(response => {
+
+        // update summonerIDs for use as params for riot endpoints
+        summonerId = response.data.id;
+        profileIconId = response.data.profileIconId;
+
+        // Update summonerData with info from response
+        data.summonerName = response.data.name;
+        data.level = response.data.summonerLevel;
+        data.icon = `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/profileicon/${profileIconId}.png`
+
+        // Query league rank by summonerID
+        axios.get(`https://na1.api.riotgames.com/lol/league/v4/positions/by-summoner/${summonerId}?api_key=${API_KEY}`)
+            .then(response => {
+
+                // Find ranked Details
+                response.data.forEach(element => {
+                    if (element.queueType === 'RANKED_SOLO_5x5') {
+
+                        // Update summonerData
+                        data.rank = `${element.tier} ${element.rank}`
+                        // console.log(element.tier,element.rank ,element.leaguePoints)
+                    }
+                });
+
+                // Send Data back to client
+                res.send(data);
+            }).catch(error => {
+                console.log(error);
+                res.sendStatus(400);
+            })
+    }).catch(error => {
+        console.log(error);
+        res.sendStatus(400);
+    })
+})
+
+// Endpoint for Body Data
+router.get('/:region/:summonerName/:queue', (req, res) => {
 
     // Prepare data from request params
     const region = req.params.region;
@@ -114,9 +161,6 @@ router.get('/:region/:summonerName', (req, res) => {
     // Data to be sent to be used by client
     let summonerData = {
         summonerName: '', // Official username (byRonE -> Byrone) Done
-        level: '',  //  1-999 DONE
-        rank: '',   // unranked-challenger DONE
-        icon: '',   // .png <-- CHECK .version DONE
         matchResults: { wins: 0, losses: 0, winrate: '' }, // Winrate for past 20 games Done
         KDA: { kills: 0, deaths: 0, assists: 0, kdar: '' }, // DONE
         top3ChampData: [],  // KDA & WR for top 3 champs along with icon DONE
@@ -136,31 +180,31 @@ router.get('/:region/:summonerName', (req, res) => {
         summonerIDs.profileIconId = response.data.profileIconId;
 
         // Update summonerData with info from response
-        summonerData.summonerName = response.data.name;
-        summonerData.level = response.data.summonerLevel;
-        summonerData.icon = `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/profileicon/${response.data.profileIconId}.png`
+        // summonerData.summonerName = response.data.name;
+        // summonerData.level = response.data.summonerLevel;
+        // summonerData.icon = `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/profileicon/${response.data.profileIconId}.png`
 
-        // Query league rank by summonerID
-        axios.get(`https://na1.api.riotgames.com/lol/league/v4/positions/by-summoner/${summonerIDs.summonerId}?api_key=${API_KEY}`)
-            .then(response => {
+        // // Query league rank by summonerID
+        // axios.get(`https://na1.api.riotgames.com/lol/league/v4/positions/by-summoner/${summonerIDs.summonerId}?api_key=${API_KEY}`)
+        //     .then(response => {
 
-                // Find ranked Details
-                response.data.forEach(element => {
-                    if (element.queueType === 'RANKED_SOLO_5x5') {
+        //         // Find ranked Details
+        //         response.data.forEach(element => {
+        //             if (element.queueType === 'RANKED_SOLO_5x5') {
 
-                        // Update summonerData
-                        summonerData.rank = `${element.tier} ${element.rank}`
-                        // console.log(element.tier,element.rank ,element.leaguePoints)
-                    }
-                });
-            }).catch(error => {
-                console.log(error);
-                res.sendStatus(400);
-            })
+        //                 // Update summonerData
+        //                 summonerData.rank = `${element.tier} ${element.rank}`
+        //                 // console.log(element.tier,element.rank ,element.leaguePoints)
+        //             }
+        //         });
+        //     }).catch(error => {
+        //         console.log(error);
+        //         res.sendStatus(400);
+        //     })
+
 
         // Query ranked solo queue match history
-        axios.get(`https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/${summonerIDs.accountId}?queue=400&endIndex=1&beginIndex=0&api_key=${API_KEY}`)
-            // axios.get(`https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/${summonerIDs.accountId}?queue=${queueType}&endIndex=5&beginIndex=0&api_key=${API_KEY}`)
+        axios.get(`https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/${summonerIDs.accountId}?queue=${queueType}&endIndex=1&beginIndex=0&api_key=${API_KEY}`)
             .then(response => {
 
                 // Keeps track of all champions played across queried matchlist
@@ -222,8 +266,8 @@ router.get('/:region/:summonerName', (req, res) => {
 
                                     championStats.wins += (queriedMatchParticipant.stats.win) ? 1 : 0;
                                     championStats.loses += (queriedMatchParticipant.stats.win) ? 0 : 1;
-                                    championStats.totalGamesPlayed ++,
-                                    championStats.winrate = `${((championStats.wins/ ((championStats.wins) + (championStats.loses)))* 100).toFixed(2)}%`;
+                                    championStats.totalGamesPlayed++ ,
+                                        championStats.winrate = `${((championStats.wins / ((championStats.wins) + (championStats.loses))) * 100).toFixed(2)}%`;
 
                                     championStats.kills += queriedMatchParticipant.stats.kills;
                                     championStats.averageKills = Number((championStats.kills / championStats.totalGamesPlayed).toFixed(2));
@@ -232,12 +276,12 @@ router.get('/:region/:summonerName', (req, res) => {
                                     championStats.averageAssists = Number((championStats.assists / championStats.totalGamesPlayed).toFixed(2));
 
                                     championStats.deaths += queriedMatchParticipant.stats.deaths;
-                                    championStats.averageDeaths= Number((championStats.deaths / championStats.totalGamesPlayed).toFixed(2));
+                                    championStats.averageDeaths = Number((championStats.deaths / championStats.totalGamesPlayed).toFixed(2));
 
                                     championStats.cs += (queriedMatchParticipant.stats.totalMinionsKilled + queriedMatchParticipant.stats.neutralMinionsKilled);
                                     championStats.averageCs = Number(((championStats.cs) / (championStats.totalGamesPlayed)).toFixed(2));
 
-                                    } else {
+                                } else {
                                     championHistory[champions[summonerChampionId]] = {
                                         champion: champions[summonerChampionId],
                                         icon: `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/champion/${champions[summonerChampionId]}.png`,
@@ -261,8 +305,8 @@ router.get('/:region/:summonerName', (req, res) => {
                                 }
 
                                 // Spells *http://ddragonexplorer.com/cdn/8.24.1/data/en_US/summoner.json*
-                                matchInformation.spells = { 
-                                    spell1Icon: `http://ddragon.leagueoflegends.com/cdn/8.24.1/img/spell/${spells[queriedMatchParticipant.spell1Id]}`, 
+                                matchInformation.spells = {
+                                    spell1Icon: `http://ddragon.leagueoflegends.com/cdn/8.24.1/img/spell/${spells[queriedMatchParticipant.spell1Id]}`,
                                     spell2Icon: `http://ddragon.leagueoflegends.com/cdn/8.24.1/img/spell/${spells[queriedMatchParticipant.spell2Id]}`
                                 };
 
@@ -278,9 +322,9 @@ router.get('/:region/:summonerName', (req, res) => {
                                 ]
 
                                 // Runes *http://ddragonexplorer.com/cdn/img/perk-images/*
-                                matchInformation.runes = { 
-                                    mainIcon: `http://ddragon.leagueoflegends.com/cdn/img/${keystoneRunes[queriedMatchParticipant.stats.perkPrimaryStyle]}`, 
-                                    subIcon: `http://ddragon.leagueoflegends.com/cdn/img/${keystoneRunes[queriedMatchParticipant.stats.perkSubStyle]}` 
+                                matchInformation.runes = {
+                                    mainIcon: `http://ddragon.leagueoflegends.com/cdn/img/${keystoneRunes[queriedMatchParticipant.stats.perkPrimaryStyle]}`,
+                                    subIcon: `http://ddragon.leagueoflegends.com/cdn/img/${keystoneRunes[queriedMatchParticipant.stats.perkSubStyle]}`
                                 }
 
                                 console.log(matchInformation.runes);
@@ -334,6 +378,7 @@ router.get('/:region/:summonerName', (req, res) => {
 
                             }).catch(error => {
                                 console.log(error);
+                                res.sendStatus(400);
                             })
 
                     }// End of matchlist for loop
@@ -356,7 +401,7 @@ router.get('/:region/:summonerName', (req, res) => {
 
                     // Calculate kill/death ration after all matches' KDAs calculated
                     summonerData.KDA.kdar = `${((summonerData.KDA.kills + summonerData.KDA.assists) / summonerData.KDA.deaths).toFixed(2)}:1`
-                    
+
                     /* 
                         Calculate 3 most played champions by games played, after all matches 
                         .sort mutates original object
@@ -366,20 +411,21 @@ router.get('/:region/:summonerName', (req, res) => {
                         push first 3 champs into summonerData.top3ChampData 
                     */
 
-                    Object.keys(championHistory).sort((a,b) =>{
+                    Object.keys(championHistory).sort((a, b) => {
                         return championHistory[b].totalGamesPlayed - championHistory[a].totalGamesPlayed
-                    }).forEach((champion,i)=>{
-                        if(i <= 2){
+                    }).forEach((champion, i) => {
+                        if (i <= 2) {
                             summonerData.top3ChampData.push(championHistory[champion])
                         }
                     })
 
-                    //res.send(summonerData)
+                    res.send(summonerData)
 
                 })() // End of immediate async function
 
             }).catch(error => {
                 console.log(error);
+                res.sendStatus(400);
             })
 
     }).catch(error => {
