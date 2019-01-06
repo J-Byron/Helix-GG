@@ -4,6 +4,10 @@ const router = express.Router();
 const axios = require('axios');
 require('dotenv').config();
 
+// *----------* Environment variables *----------*
+const API_KEY = process.env.API_KEY;
+const D_VERSION = process.env.DDRAGON_VERSION;
+
 /* 
 
         -Notes-
@@ -33,19 +37,45 @@ require('dotenv').config();
 
     */
 
+// *----------* Static Data  *----------*
+
+// objects to hold all champions/spells/tunes and their associated ids ( used for finding images )
+let champions = {};
+let spells = {};
+let keystoneRunes = {};
+
+
+// CHAMPIONS
+
+// Query ddragon for all champions and map each with an id and name into champions
+axios.get(`http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/data/en_US/champion.json`).then(response => {
+
+    const championData = response.data.data;
+
+    for (let champion in championData) {
+        champions[`${championData[champion].key}`] = championData[champion].id;
+    }
+
+}).catch(err => {
+    console.log(err);
+});
+
+// SPELLS
+// http://ddragon.leagueoflegends.com/cdn/8.24.1/data/en_US/summoner.json by key grab id ->
+// http://ddragon.leagueoflegends.com/cdn/8.24.1/img/spell/ + <SummonerSpell>.png
+
+// RUNES
+// http://ddragon.leagueoflegends.com/cdn/8.24.1/data/en_US/runesReforged.json by id grab icon path ->  
+// http://ddragon.leagueoflegends.com/cdn/img/ + perk-images/Styles/7200_Domination.png
+
 // *----------* Routes *----------*
 
 router.get('/:region/:summonerName', (req, res) => {
-
 
     // Prepare data from request params
     const region = req.params.region;
     const summonerName = req.params.summonerName;
     const queueType = (req.params.queue == 'Ranked') ? 420 : 400;
-
-    // Environment variables
-    const API_KEY = process.env.API_KEY;
-    const D_VERSION = process.env.DDRAGON_VERSION;
 
     // Holds identifiers for further requests about summoner
     let summonerIDs = {
@@ -57,37 +87,16 @@ router.get('/:region/:summonerName', (req, res) => {
 
     // Data to be sent to be used by client
     let summonerData = {
+        summonerName: '', // Official username (byRonE -> Byrone) Done
         level: '',  //  1-999 DONE
         rank: '',   // unranked-challenger DONE
         icon: '',   // .png <-- CHECK .version DONE
-        matchResults: { wins: 0, losses: 0, winrate: '' }, // Winrate for past 20 games
+        matchResults: { wins: 0, losses: 0, winrate: '' }, // Winrate for past 20 games Done
         KDA: { kills: 0, deaths: 0, assists: 0, kdar: '' }, // DONE
-        top3ChampData: [],  // KDA & WR for top 3 champs along with icon 
+        top3ChampData: [],  // KDA & WR for top 3 champs along with icon DONE
         championData: [],   // Top 10 ranked champs [{champion icon, win rate, averages cs, kda }]
         matchHistory: [],   // [{matchid, build, champion icon, cs, date, result, kda, [teammates]}] DONE
     }
-
-    // objects to hold all champions/spells/tunes and their associated ids ( used for finding images )
-    let champions = {};
-    let spells = {};
-    let keystoneRunes = {};
-
-    // Query ddragon for all champions and map each with an id and name into champions
-    axios.get(`http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/data/en_US/champion.json`).then(response => {
-
-        const championData = response.data.data;
-
-        for (let champion in championData) {
-            champions[`${championData[champion].key}`] = championData[champion].id;
-        }
-
-    }).catch(err => {
-        console.log(err);
-    });
-
-    // Spells 
-
-    // Runes
 
     console.log(`${region} ${summonerName} ${API_KEY}`);
 
@@ -101,7 +110,8 @@ router.get('/:region/:summonerName', (req, res) => {
         summonerIDs.profileIconId = response.data.profileIconId;
 
         // Update summonerData with info from response
-        summonerData.level = response.data.summonerLevel
+        summonerData.summonerName = response.data.name;
+        summonerData.level = response.data.summonerLevel;
         summonerData.icon = `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/profileicon/${response.data.profileIconId}.png`
 
         // Query league rank by summonerID
@@ -118,14 +128,17 @@ router.get('/:region/:summonerName', (req, res) => {
                     }
                 });
             }).catch(error => {
-                console.log(error.response);
+                console.log(error);
                 res.sendStatus(400);
             })
 
         // Query ranked solo queue match history
-        axios.get(`https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/${summonerIDs.accountId}?queue=400&endIndex=5&beginIndex=0&api_key=${API_KEY}`)
+        axios.get(`https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/${summonerIDs.accountId}?queue=400&endIndex=11&beginIndex=0&api_key=${API_KEY}`)
             // axios.get(`https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/${summonerIDs.accountId}?queue=${queueType}&endIndex=5&beginIndex=0&api_key=${API_KEY}`)
             .then(response => {
+
+                // Keeps track of all champions played across queried matchlist
+                let championHistory = {};
 
                 /*
                     This is an immediate asynchronous arrow function
@@ -140,6 +153,7 @@ router.get('/:region/:summonerName', (req, res) => {
                     If this was not done in an asynchronous function, summonerData would be incomplete at delivery
                           
                 */
+
                 (async () => {
                     // Sychonously Query data for each individual match of matchlist with gameID
                     for (let match of response.data.matches) {
@@ -150,7 +164,7 @@ router.get('/:region/:summonerName', (req, res) => {
                                 const matchaResponseData = response.data;
 
                                 // Queried summoner's identity in match
-                                let matchParticipant;
+                                let queriedMatchParticipant;
 
                                 // Information about each match, pushed into match history
                                 let matchInformation = {};
@@ -162,34 +176,81 @@ router.get('/:region/:summonerName', (req, res) => {
                                         // Need image for: 1 champion, 2 spells, 2 runes, 7 items, 10 players = 22 api requests
 
                                         // Get the matchParticipant id of the queried summoner in particular match
-                                        matchParticipant = matchaResponseData.participants[participant.participantId - 1];
+                                        queriedMatchParticipant = matchaResponseData.participants[participant.participantId - 1];
                                         break;
                                     }
                                 }
 
                                 // Champion *ddragonexplorer.com/cdn/8.24.1/img/champion/{}.png*
-                                const summonerChampionId = matchParticipant.championId;
+                                const summonerChampionId = queriedMatchParticipant.championId;
                                 matchInformation.champion = { name: champions[summonerChampionId], icon: `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/champion/${champions[summonerChampionId]}.png` };
 
-                                // Spells *http://ddragonexplorer.com/cdn/8.24.1/data/en_US/summoner.json*
-                                matchInformation.spells = { spell1: matchParticipant.spell1Id, spell2: matchParticipant.spell2Id };
+                                // If Champion already exists in champion history, 
+                                // update that champions statistics 
+                                // else create a new champion object
 
-                                // End game items 
+                                if (championHistory.hasOwnProperty(champions[summonerChampionId])) {
+                                    const championStats = championHistory[champions[summonerChampionId]];
+
+                                    championStats.wins += (queriedMatchParticipant.stats.win) ? 1 : 0;
+                                    championStats.loses += (queriedMatchParticipant.stats.win) ? 0 : 1;
+                                    championStats.totalGamesPlayed ++,
+                                    championStats.winrate = `${((championStats.wins/ ((championStats.wins) + (championStats.loses)))* 100).toFixed(2)}%`;
+
+                                    championStats.kills += queriedMatchParticipant.stats.kills;
+                                    championStats.averageKills = Number((championStats.kills / championStats.totalGamesPlayed).toFixed(2));
+
+                                    championStats.assists += queriedMatchParticipant.stats.assists;
+                                    championStats.averageAssists = Number((championStats.assists / championStats.totalGamesPlayed).toFixed(2));
+
+                                    championStats.deaths += queriedMatchParticipant.stats.deaths;
+                                    championStats.averageDeaths= Number((championStats.deaths / championStats.totalGamesPlayed).toFixed(2));
+
+                                    championStats.cs += (queriedMatchParticipant.stats.totalMinionsKilled + queriedMatchParticipant.stats.neutralMinionsKilled);
+                                    championStats.averageCs = Number(((championStats.cs) / (championStats.totalGamesPlayed)).toFixed(2));
+
+                                    } else {
+                                    championHistory[champions[summonerChampionId]] = {
+                                        champion: champions[summonerChampionId],
+                                        icon: `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/champion/${champions[summonerChampionId]}.png`,
+                                        wins: (queriedMatchParticipant.stats.win) ? 1 : 0,
+                                        loses: (queriedMatchParticipant.stats.win) ? 0 : 1,
+                                        totalGamesPlayed: 1,
+                                        winrate: `${(queriedMatchParticipant.stats.win) ? '100' : '0'}%`,
+
+                                        kills: queriedMatchParticipant.stats.kills,
+                                        averageKills: queriedMatchParticipant.stats.kills,
+
+                                        assists: queriedMatchParticipant.stats.assists,
+                                        averageAssists: queriedMatchParticipant.stats.assists,
+
+                                        deaths: queriedMatchParticipant.stats.deaths,
+                                        averageDeaths: queriedMatchParticipant.stats.deaths,
+
+                                        cs: (queriedMatchParticipant.stats.totalMinionsKilled + queriedMatchParticipant.stats.neutralMinionsKilled),
+                                        averageCs: (queriedMatchParticipant.stats.totalMinionsKilled + queriedMatchParticipant.stats.neutralMinionsKilled),
+                                    }
+                                }
+
+                                // Spells *http://ddragonexplorer.com/cdn/8.24.1/data/en_US/summoner.json*
+                                matchInformation.spells = { spell1: queriedMatchParticipant.spell1Id, spell2: queriedMatchParticipant.spell2Id };
+
+                                // End game items (to be refractored)
                                 matchInformation.items = [
-                                    `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/item/${matchParticipant.stats.item0}.png`,
-                                    `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/item/${matchParticipant.stats.item1}.png`,
-                                    `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/item/${matchParticipant.stats.item2}.png`,
-                                    `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/item/${matchParticipant.stats.item3}.png`,
-                                    `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/item/${matchParticipant.stats.item4}.png`,
-                                    `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/item/${matchParticipant.stats.item5}.png`,
-                                    `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/item/${matchParticipant.stats.item6}.png`,
+                                    `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/item/${queriedMatchParticipant.stats.item0}.png`,
+                                    `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/item/${queriedMatchParticipant.stats.item1}.png`,
+                                    `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/item/${queriedMatchParticipant.stats.item2}.png`,
+                                    `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/item/${queriedMatchParticipant.stats.item3}.png`,
+                                    `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/item/${queriedMatchParticipant.stats.item4}.png`,
+                                    `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/item/${queriedMatchParticipant.stats.item5}.png`,
+                                    `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/item/${queriedMatchParticipant.stats.item6}.png`,
                                 ]
 
                                 // Runes *http://ddragonexplorer.com/cdn/img/perk-images/*
-                                matchInformation.runes = { main: matchParticipant.stats.perkPrimaryStyle, sub: matchParticipant.stats.perkSubStyle }
+                                matchInformation.runes = { main: queriedMatchParticipant.stats.perkPrimaryStyle, sub: queriedMatchParticipant.stats.perkSubStyle }
 
                                 // CS
-                                matchInformation.cs = matchParticipant.stats.totalMinionsKilled + matchParticipant.stats.neutralMinionsKilled;
+                                matchInformation.cs = queriedMatchParticipant.stats.totalMinionsKilled + queriedMatchParticipant.stats.neutralMinionsKilled;
 
                                 // Date (<1hr, hr, day, week)
 
@@ -197,31 +258,31 @@ router.get('/:region/:summonerName', (req, res) => {
                                 matchInformation.time = `${Math.floor(matchaResponseData.gameDuration / 60)}m ${matchaResponseData.gameDuration % 60}s`;
 
                                 // Result
-                                matchInformation.result = matchParticipant.stats.win
+                                matchInformation.result = queriedMatchParticipant.stats.win
 
                                 // Update total results of matches
-                                summonerData.matchResults[(matchParticipant.stats.win) ? 'wins' : 'losses'] += 1;
+                                summonerData.matchResults[(queriedMatchParticipant.stats.win) ? 'wins' : 'losses'] += 1;
 
                                 // KDA
                                 matchInformation.kda = {
-                                    kills: matchParticipant.stats.kills,
-                                    deaths: matchParticipant.stats.deaths,
-                                    assists: matchParticipant.stats.assists,
+                                    kills: queriedMatchParticipant.stats.kills,
+                                    deaths: queriedMatchParticipant.stats.deaths,
+                                    assists: queriedMatchParticipant.stats.assists,
                                     kdar: `${
-                                        ((matchParticipant.stats.kills + matchParticipant.stats.assists) / matchParticipant.stats.deaths).toFixed(2)
+                                        ((queriedMatchParticipant.stats.kills + queriedMatchParticipant.stats.assists) / queriedMatchParticipant.stats.deaths).toFixed(2)
                                         }:1`
                                 }
 
                                 // Champion KDA
 
                                 // Update total KDA of matches
-                                summonerData.KDA.kills += matchParticipant.stats.kills;
-                                summonerData.KDA.assists += matchParticipant.stats.assists;
-                                summonerData.KDA.deaths += matchParticipant.stats.deaths;
+                                summonerData.KDA.kills += queriedMatchParticipant.stats.kills;
+                                summonerData.KDA.assists += queriedMatchParticipant.stats.assists;
+                                summonerData.KDA.deaths += queriedMatchParticipant.stats.deaths;
 
                                 // Players: Determine participants of match (excluding queried Summoner)
                                 matchInformation.matchParticipants = matchaResponseData.participantIdentities.filter(participant => {
-                                    return participant.participantId != matchParticipant.participantId
+                                    return participant.participantId != queriedMatchParticipant.participantId
                                 }).map(participant => {
                                     // An object with information about each player that isn't the queried summoner
                                     const player = matchaResponseData.participants[participant.participantId - 1];
@@ -242,6 +303,16 @@ router.get('/:region/:summonerName', (req, res) => {
 
                     }// End of matchlist for loop
 
+                    // Show rate limits to prevent blacklist
+                    console.log(
+                        `Rate limits: 
+                    App-- limit: [${response.headers["x-app-rate-limit"]}] count: [${response.headers["x-app-rate-limit-count"]}]
+                    Method-- limit: [${response.headers["x-method-rate-limit"]}] count: [${response.headers["x-method-rate-limit-count"]}]
+                    `
+                    );
+
+                    // *----------* Prepate summoner Data Object for delivery to client *----------*
+
                     // Calculate Winrate after all match results calculated
                     summonerData.matchResults.winrate = `${
                         ((summonerData.matchResults.wins /
@@ -250,27 +321,46 @@ router.get('/:region/:summonerName', (req, res) => {
 
                     // Calculate kill/death ration after all matches' KDAs calculated
                     summonerData.KDA.kdar = `${((summonerData.KDA.kills + summonerData.KDA.assists) / summonerData.KDA.deaths).toFixed(2)}:1`
+                    
+                    // Calculate 3 most played champions by games played, after all matches 
+                    // .sort mutates original object
 
-                    //
-                    console.log(summonerData);
+                    // Object.keys(
+                    //     championHistory.sort((a,b) => {
+                    //         return a.totalGamesPlayed - b.totalGamesPlayed
+                    //     })
+                    // ).map((champion,i) =>{
+                    //     if(i <= 2){
+                    //         summonerData.top3ChampData.push(champion)
+                    //         console.log('Pushed', champion);
+                    //     }
+                    // })
+
+                    // {keys} -> [keys], 
+                    // sort [keys] by {}.total games played, 
+                    // push first 3 champs into summonerData.top3ChampData 
+                    Object.keys(championHistory).sort((a,b) =>{
+                        return championHistory[b].totalGamesPlayed - championHistory[a].totalGamesPlayed
+                    }).forEach((champion,i)=>{
+                        if(i <= 2){
+                            summonerData.top3ChampData.push(championHistory[champion])
+                        }
+                    })
+
+                    // console.log(championHistory);
+                    console.log(summonerData.top3ChampData);
+
+                    //res.send(summonerData)
 
                 })() // End of immediate async function
 
             }).catch(error => {
-                console.log(error.response);
+                console.log(error);
             })
-
-        // Show rate limits to prevent blacklist
-        console.log(
-            `Rate limits: 
-                    App-- limit: [${response.headers["x-app-rate-limit"]}] count: [${response.headers["x-app-rate-limit-count"]}]
-                    Method-- limit: [${response.headers["x-method-rate-limit"]}] count: [${response.headers["x-method-rate-limit-count"]}]
-                    `
-        );
 
     }).catch(error => {
         // res.send({didSucceed: false, data: null})\
-        console.log(error.response);
+        console.log(error);
         res.sendStatus(400);
     })
 })
