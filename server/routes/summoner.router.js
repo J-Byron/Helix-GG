@@ -114,21 +114,25 @@ router.get('/:region/:summonerName', (req, res) => {
         // Update summonerData with info from response
         data.summonerName = response.data.name;
         data.level = response.data.summonerLevel;
-        data.icon = `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/profileicon/${profileIconId}.png`
+        data.profileIcon = `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/profileicon/${profileIconId}.png`;
 
         // Query league rank by summonerID
         axios.get(`https://na1.api.riotgames.com/lol/league/v4/positions/by-summoner/${summonerId}?api_key=${API_KEY}`)
             .then(response => {
 
                 // Find ranked Details
-                response.data.forEach(element => {
-                    if (element.queueType === 'RANKED_SOLO_5x5') {
+                if (response.data.length == 0) {
+                    data.rank = `Unranked`;
+                } else {
+                    response.data.forEach(element => {
+                        if (element.queueType === 'RANKED_SOLO_5x5') {
 
-                        // Update summonerData
-                        data.rank = `${element.tier} ${element.rank}`
-                        // console.log(element.tier,element.rank ,element.leaguePoints)
-                    }
-                });
+                            // Update summonerData
+                            data.rank = `${element.tier} ${element.rank}`
+                            // console.log(element.tier,element.rank ,element.leaguePoints)
+                        }
+                    });
+                }
 
                 // Send Data back to client
                 res.send(data);
@@ -155,7 +159,6 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
         summonerId: '',     // league rank endpoint
         accountId: '',      // match list endpoint
         puuid: '',          // migration to v4
-        profileIconId: '',  // for fetching icon in ddragon
     };
 
     // Data to be sent to be used by client
@@ -177,34 +180,9 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
         summonerIDs.summonerId = response.data.id;
         summonerIDs.accountId = response.data.accountId;
         summonerIDs.puuid = response.data.puuid;
-        summonerIDs.profileIconId = response.data.profileIconId;
-
-        // Update summonerData with info from response
-        // summonerData.summonerName = response.data.name;
-        // summonerData.level = response.data.summonerLevel;
-        // summonerData.icon = `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/profileicon/${response.data.profileIconId}.png`
-
-        // // Query league rank by summonerID
-        // axios.get(`https://na1.api.riotgames.com/lol/league/v4/positions/by-summoner/${summonerIDs.summonerId}?api_key=${API_KEY}`)
-        //     .then(response => {
-
-        //         // Find ranked Details
-        //         response.data.forEach(element => {
-        //             if (element.queueType === 'RANKED_SOLO_5x5') {
-
-        //                 // Update summonerData
-        //                 summonerData.rank = `${element.tier} ${element.rank}`
-        //                 // console.log(element.tier,element.rank ,element.leaguePoints)
-        //             }
-        //         });
-        //     }).catch(error => {
-        //         console.log(error);
-        //         res.sendStatus(400);
-        //     })
-
 
         // Query ranked solo queue match history
-        axios.get(`https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/${summonerIDs.accountId}?queue=${queueType}&endIndex=1&beginIndex=0&api_key=${API_KEY}`)
+        axios.get(`https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/${summonerIDs.accountId}?queue=${queueType}&endIndex=5&beginIndex=0&api_key=${API_KEY}`)
             .then(response => {
 
                 // Keeps track of all champions played across queried matchlist
@@ -224,7 +202,7 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
                           
                 */
 
-                (async () => {
+                (async () => { 
                     // Sychonously Query data for each individual match of matchlist with gameID
                     for (let match of response.data.matches) {
                         await axios.get(`https://na1.api.riotgames.com/lol/match/v4/matches/${match.gameId}?api_key=${API_KEY}`)
@@ -327,11 +305,10 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
                                     subIcon: `http://ddragon.leagueoflegends.com/cdn/img/${keystoneRunes[queriedMatchParticipant.stats.perkSubStyle]}`
                                 }
 
-                                console.log(matchInformation.runes);
                                 // CS
                                 matchInformation.cs = queriedMatchParticipant.stats.totalMinionsKilled + queriedMatchParticipant.stats.neutralMinionsKilled;
 
-                                // Date (<1hr, hr, day, week)
+                                // Date? (<1hr, hr, day, week) 
 
                                 // Time (minutes:seconds)
                                 matchInformation.time = `${Math.floor(matchaResponseData.gameDuration / 60)}m ${matchaResponseData.gameDuration % 60}s`;
@@ -407,7 +384,7 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
                         .sort mutates original object
 
                         {keys} -> [keys], 
-                        sort [keys] by {}.total games played, 
+                        sort [keys] by {key}.total games played, 
                         push first 3 champs into summonerData.top3ChampData 
                     */
 
@@ -419,7 +396,7 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
                         }
                     })
 
-                    res.send(summonerData)
+                    res.send(summonerData);
 
                 })() // End of immediate async function
 
