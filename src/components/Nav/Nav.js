@@ -17,8 +17,8 @@ const Nav = (props) => (
     </Link>
     <div className="nav-right">
       <Link className="nav-link" to="/home">
-       
-        {props.user.id ? 'Home' : 'Login / Register'}
+        {props.user.id ? 'Home' : 'Login'}
+        {}
       </Link>
 
       {props.user.id && (
