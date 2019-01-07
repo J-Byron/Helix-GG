@@ -2,8 +2,8 @@
 
 .nav {
   overflow: hidden;
-  background-color: #0CA5B0;
-  box-shadow: 0px 5px #09737A;
+  background-color: #222831;
+  /* box-shadow: 0px 5px #222831; */
   height:60px;
   width: 100%;
   position: fixed;

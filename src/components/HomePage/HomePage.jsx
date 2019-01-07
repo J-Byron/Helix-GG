@@ -72,7 +72,7 @@ class HomePage extends Component {
         return (
             <div style={{ justifyContent: 'center' }}>
 
-                <p className="DisplayText"> Helix.GG </p>
+                <p className="DisplayText"> Helix<em>.</em>GG </p>
                 <div className="searchBar">
                     <input className='searchForm' onChange={this.handleChange} value={this.state.usernameInput} type="text" placeholder="Search summoner" spellCheck="false">
                     </input>
