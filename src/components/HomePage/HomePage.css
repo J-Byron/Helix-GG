@@ -3,13 +3,18 @@
 
 .DisplayText {
     cursor: default;
-    color: #363636;
+    color: #00adb5;
     display: inline-block;
     font-family: 'Krungthep';
     font-size: 11vw;
     margin: 200px 25% 0px 25%;
     text-align: center;
     width: 50%;
+}
+
+.DisplayText em{
+    color: #eeeeee;
+    font-style: normal;
 }
 
 .searchBar {
