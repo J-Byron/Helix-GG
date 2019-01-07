@@ -5,6 +5,9 @@ import './HomePage.css';
 // *----------* Redux *----------*
 import { connect } from 'react-redux';
 
+// *----------* Router *----------*
+import { withRouter } from "react-router";
+
 // const themes = {
 //     light:{
 //         primary:,
@@ -54,12 +57,15 @@ class HomePage extends Component {
         console.log('Preparing to dispatch', queryParameters);
         this.props.dispatch({ type: 'FETCH_SUMMONER', payload: queryParameters })
 
+        this.props.history.push(`/search/summonerName=${this.state.usernameInput}`);
+
         // Clear input field
         this.setState(
             {
                 usernameInput: ''
             }
         )
+
     }
 
     render() {

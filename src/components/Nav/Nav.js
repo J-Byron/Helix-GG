@@ -12,8 +12,8 @@ import './Nav.css';
         
 const Nav = (props) => (
   <div className="nav">
-    {/* <Link to="/home">
-      <h2 className="nav-title">Prime Solo Project</h2>
+    <Link to="/home">
+      <h2 className="nav-title"> </h2>
     </Link>
     <div className="nav-right">
       <Link className="nav-link" to="/home">
@@ -33,7 +33,7 @@ const Nav = (props) => (
       <Link className="nav-link" to="/about">
         About
       </Link>
-    </div> */}
+    </div>
   </div>
 );
 

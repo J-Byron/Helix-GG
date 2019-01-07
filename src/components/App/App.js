@@ -33,13 +33,22 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <Nav />
+        <Nav />
           <Switch>
+            {/* Nav will need access to profile route */}
+
             {/* Visiting localhost:3000 will redirect to localhost:3000/home*/}
             <Redirect exact from="/" to="/home" />
-            
-            <Route path='/home' component={HomePage}/>
-            
+
+            {/* Visiting /home will render the homepage component, regardless if logged in */}
+            <Route path='/home' component={HomePage} />
+
+            {/* Visiting /Search (after a search) will render the search page  */}
+            <Route path='/Search' component={() => { }} />
+
+            {/* Visiting /search will result in an error page, otherwise it will render the profile page of the user */}
+            <ProtectedRoute path='/profile' component={() => { }} />
+
           </Switch>
           <Footer />
         </div>
