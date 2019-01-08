@@ -1,0 +1,29 @@
+@import url(//db.onlinewebfonts.com/c/736cf5b08b01082a3645e14038868e20?family=Krungthep);
+
+.login-button {
+    color: #00adb5;
+    font-family: 'Krungthep';
+    float: right;
+    margin-right: 30px;
+    text-decoration: none;
+}
+
+.expanded-login-menu {
+    width: 900px;
+    height: 900px;
+    background-color: salmon;
+    position: absolute;
+    top: 0px;
+}
+
+.collapsed-login-menu {
+    width: 900px;
+    height: 900px;
+    margin-top: 40px;
+    background-color: salmon;
+    /* visibility: hidden; */
+    position: absolute;
+    right: 30px;
+    top: 45px;
+}
+
