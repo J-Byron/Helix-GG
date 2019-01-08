@@ -4,8 +4,9 @@
     color: #00adb5;
     font-family: 'Krungthep';
     float: right;
-    margin-right: 30px;
+    margin: 20px 30px 0px 0px;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .expanded-login-menu {
@@ -16,14 +17,5 @@
     top: 0px;
 }
 
-.collapsed-login-menu {
-    width: 900px;
-    height: 900px;
-    margin-top: 40px;
-    background-color: salmon;
-    /* visibility: hidden; */
-    position: absolute;
-    right: 30px;
-    top: 45px;
-}
+
 

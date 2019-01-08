@@ -15,7 +15,7 @@ class LoginButton extends Component {
     render() {
         return (
             <div>
-                <div className='login-button' onClick={this.props.toggleDropDown}>
+                <div className='login-button' onClick={this.props.toggleLoginDropDown}>
                     Login
                 </div>
             </div>

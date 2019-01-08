@@ -105,7 +105,8 @@ router.get('/:region/:summonerName', (req, res) => {
     let data = {};
 
     // Query riotgames for summoner by summoner name 
-    axios.get(`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}?api_key=${API_KEY}`).then(response => {
+    axios.get(`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}?api_key=${API_KEY}`)
+    .then(response => {
 
         // update summonerIDs for use as params for riot endpoints
         summonerId = response.data.id;
