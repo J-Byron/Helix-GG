@@ -15,6 +15,7 @@ import LoginDropDown from '../LoginDropDown/LoginDropDown';
 
 // *----------* Styling *----------*
 import './Nav.css';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 //  {/* Show this link if they are logged in or not,
 //         but call this link 'Home' if they are logged in,
@@ -24,13 +25,20 @@ import './Nav.css';
 
 class Nav extends Component {
   state = {
-    expandedLogin: false,
-    expandRegister: false
+    appearLogin: false,
+    appearRegister: false
   }
 
-  toggleDropDown = () => {
+  toggleLoginDropDown = () => {
+    console.log(`DROPDOWN!`);
     this.setState({
-      expandedLogin: !this.state.expandedLogin
+      appearLogin: !this.state.appearLogin
+    })
+  }
+
+  toggleRegisterDropDown = () => {
+    this.setState({
+      appearRegister: !this.state.appearRegister
     })
   }
 
@@ -39,11 +47,25 @@ class Nav extends Component {
       <div>
         <div className="nav">
 
-          {this.props.user.id ? 'Home' : (<LoginButton toggleDropDown={this.toggleDropDown} />)}
-
+          {this.props.user.id ? 'Home' : (
+            <div>
+              <LoginButton toggleLoginDropDown={this.toggleLoginDropDown} />
+              <CSSTransition
+                // key={0}
+                in={this.state.appearLogin}
+                appear={true}
+                timeout={500}
+                classNames="fade"
+                mountOnEnter
+                unmountOnExit
+                // onEntering={}
+                // onExiting={() => console.log("Leaving")}
+              >
+                {(state) => (<LoginDropDown toggleRegisterDropDown={this.toggleRegisterDropDown} />)}
+              </CSSTransition>
+            </div>
+          )}
         </div>
-
-        <LoginDropDown isToggled={this.state.expandedLogin} />
       </div>);
   }
 }
