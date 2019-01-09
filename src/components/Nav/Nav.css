@@ -47,7 +47,7 @@
 
 .fade-exit-done {
   /* visibility: hidden; */
-  /* opacity: 0; */
+  opacity: 0;
 }
 
 /* Animations */
@@ -58,32 +58,45 @@
     opacity: .25;
   }
   20% { 
-    transform: translateY(15px) scale3d(1.1,1.1,1); 
+    transform: translateY(15px) scale3d(1.05,1.05.1,1); 
     opacity: .5;
   }
   40% { 
     transform: translateY(5px); 
     opacity: .75;
   }
-  /* 60% { transform: translateY(62px) scale3d(1.05,1.05,1); } */
-  /* 80% { transform: translateY(60px) scale3d(1.01,1.01,1); } */
-  /* 100% { transform: translateY(60px) scale3d(1,1,1); } */
   100% {
     opacity: 1;
   }
 }
 
+/* Reverese movein */
 @keyframes moveout {
+
+
   0% { 
+    /* transform: scale3d(1.01,1.01.1,1) ; */
+    transform: translateY(5px); 
+    opacity:1;
+  }
+  20% {  
+    /* transform: scale3d(0.96,0.96,1); */
+    /* transform: translateY(-10px) translateX(-5px);  */
+    transform: translateY(5px); 
+    opacity: .75;
+  }
+  40% { 
+    /* transform: scale3d(1.05,1.05.1,1); */
+    /* transform: translateY(-10px) translateX(-5px);  */
+    transform: translateY(2px); 
     opacity: .5;
   }
-  20%{
-    transform: scale3d(1.05,1.05,1);
-  }
-  80%{
-    transform: scale3d(.96,.96,1);
-  }
-  100% { 
+  /* 75%{ 
+    transform: translatex(-10px); 
+    opacity: 0.25;
+  } */
+  100% {
+    /* transform: scale3d(0.96,0.96,1); */
     opacity: 0;
   }
 }

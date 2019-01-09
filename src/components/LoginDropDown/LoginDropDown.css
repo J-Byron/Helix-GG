@@ -10,21 +10,38 @@
     border-radius: 4px;
 }
 
-.upper{
+.dropDownMenu-register{
+    width: 250px;
+    height: 250px;
+    background-color: #393e46;
+    position: absolute;
+    right:30px;
+    top: 55px;
+    border-radius: 4px;
+}
+
+/* .upper{
     height: 70%;
     width: 100%;
     align-content: center;
     justify-content: center;
     display: inline;
     margin-bottom: 10px;
-}
+} */
 
-/* .login-text {
+.login-text {
     margin: 15px 0px;
     font-family: 'Krungthep';
     font-size: 18px; 
     color: #0CA5B0;
-} */
+}
+
+.error-text {
+    margin: 5px 0px;
+    font-family: 'Krungthep';
+    font-size: 8px; 
+    color: rgb(201, 57, 57);
+}
 
 .input-text, .signin-button {
     text-align: center;
@@ -45,7 +62,7 @@
     text-indent: 10px;
 }
 
-input[type=text],input[type=password]{
+.input-text{
     -webkit-transition: all 0.30s ease-in-out;
     -moz-transition: all 0.30s ease-in-out;
     -ms-transition: all 0.30s ease-in-out;
@@ -54,7 +71,7 @@ input[type=text],input[type=password]{
     border: 1px solid #ffffff;
 }
 
-input[type=text]:focus, input[type=password]:focus {
+.input-text:focus{
     box-shadow: 0 0 5px rgb(14, 209, 223);
     border: 1px solid #0CA5B0;
   }
