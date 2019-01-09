@@ -57,7 +57,7 @@ class HomePage extends Component {
         console.log('Preparing to dispatch', queryParameters);
         this.props.dispatch({ type: 'FETCH_SUMMONER', payload: queryParameters })
 
-        this.props.history.push(`/search/summonerName=${this.state.usernameInput}`);
+        // this.props.history.push(`/search/summonerName=${this.state.usernameInput}`);
 
         // Clear input field
         this.setState(

@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 // *----------* Page components *----------*
 import LoginButton from '../LoginButton/LoginButton';
 import LoginDropDown from '../LoginDropDown/LoginDropDown';
+import ProfileComponent from '../ProfileComponent/ProfileComponent';
 
 // import LogOutButton from '../LogOutButton/LogOutButton';
 
@@ -23,6 +24,8 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 //         {/* Show the link to the info page and the logout button if the user is logged in */}
 //         {/* Always show this link since the about page is not protected */}
 
+
+// Can be refractored into login button!
 class Nav extends Component {
   state = {
     appearLogin: false,
@@ -32,13 +35,26 @@ class Nav extends Component {
   toggleLoginDropDown = () => {
     console.log(`DROPDOWN!`);
     this.setState({
-      appearLogin: !this.state.appearLogin
+      appearLogin: !this.state.appearLogin,
     })
+
+    // If either forms open, close if login pressed
+    if (this.state.appearRegister || this.state.appearLogin) {
+      this.setState({
+        appearRegister: false,
+        appearLogin: false,
+      })
+    } else if (!this.state.appearRegister || !this.state.appearLogin) {
+      this.setState({
+        appearLogin: true,
+      })
+    }
   }
 
   toggleRegisterDropDown = () => {
     this.setState({
-      appearRegister: !this.state.appearRegister
+      appearRegister: !this.state.appearRegister,
+      appearLogin: !this.state.appearLogin,
     })
   }
 
@@ -46,25 +62,42 @@ class Nav extends Component {
     return (
       <div>
         <div className="nav">
+          {/* If user is loged in show profile Component */}
+          {this.props.user.id ?
 
-          {this.props.user.id ? 'Home' : (
-            <div>
+            /* If true */
+            (<ProfileComponent />) :
+
+            /* If false */
+            (<div>
               <LoginButton toggleLoginDropDown={this.toggleLoginDropDown} />
               <CSSTransition
-                // key={0}
                 in={this.state.appearLogin}
                 appear={true}
                 timeout={500}
                 classNames="fade"
                 mountOnEnter
                 unmountOnExit
-                // onEntering={}
-                // onExiting={() => console.log("Leaving")}
+              // onExiting={()=>console.log(` Login Exiting!`)}
+              // onEntering={()=>console.log(` Login Entering!`)}
+              // onExiting={() => console.log("Leaving")}
               >
-                {(state) => (<LoginDropDown toggleRegisterDropDown={this.toggleRegisterDropDown} />)}
+                {(state) => (<LoginDropDown toggleLoginDropDown={this.toggleLoginDropDown} toggleRegisterDropDown={this.toggleRegisterDropDown} />)}
+              </CSSTransition>
+              <CSSTransition
+                in={this.state.appearRegister}
+                appear={true}
+                timeout={500}
+                classNames="fade"
+                mountOnEnter
+                unmountOnExit
+              // onExiting={()=>console.log(`register Exiting!`)}
+              // onEntering={()=>console.log(` Register Entering!`)}
+              >
+                {(state) => (<LoginDropDown register={this.state.appearRegister} toggleLoginDropDown={this.toggleLoginDropDown} toggleRegisterDropDown={this.toggleRegisterDropDown} />)}
               </CSSTransition>
             </div>
-          )}
+            )}
         </div>
       </div>);
   }

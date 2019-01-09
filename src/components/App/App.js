@@ -44,7 +44,7 @@ class App extends Component {
             <Route path='/home' component={HomePage} />
 
             {/* Visiting /Search (after a search) will render the search page  */}
-            <Route path='/Search' component={() => { }} />
+            <Route path='/search' component={() => { }} />
 
             {/* Visiting /search will result in an error page, otherwise it will render the profile page of the user */}
             <ProtectedRoute path='/profile' component={() => { }} />
