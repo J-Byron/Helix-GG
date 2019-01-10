@@ -44,7 +44,9 @@ class LoginDropDown extends Component {
                 }
             })
 
-            this.props.toggleLoginDropDown();
+            if(this.props.user.id){
+                this.props.toggleLoginDropDown();
+            }
 
         } else {
             // Render an error
@@ -166,6 +168,7 @@ class LoginDropDown extends Component {
 
 const mapStoreToProps = reduxStore => ({
     errors: reduxStore.errors,
+    user: reduxStore.user
 })
 
 export default connect(mapStoreToProps)(LoginDropDown);
