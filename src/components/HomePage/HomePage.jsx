@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 // *----------* Router *----------*
 import { withRouter } from "react-router";
+import LoginDropDown from '../LoginDropDown/LoginDropDown';
 
 // const themes = {
 //     light:{
@@ -26,11 +27,18 @@ import { withRouter } from "react-router";
 class HomePage extends Component {
     state = {
         usernameInput: '',
-        selectedRegion: 'NA'
+        selectedRegion: 'NA',
+        isSearching: false,
+
     }
 
-    componentDidlMount() {
+    componentDidMount() {
         console.log('HomePage mounted');
+    }
+
+    componentWillMount(){
+        console.log('will mount');
+        
     }
 
     handleChange = (event) => {
@@ -50,39 +58,67 @@ class HomePage extends Component {
         // const regex = RegExp('^[-\w\.\$@\*\!]{1,16}$');
         // const nameIsValidated = regex.test(this.state.usernameInput);
 
+        // Clear whatever state in redux
+        // this.props.dispatch({ type: 'RESET_DATA' })
+
         // create query object
         const queryParameters = { summonerName: this.state.usernameInput, region: this.state.selectedRegion }
 
         // Dispatch query to redux --> API Requests need to be made on server side because of CORS & process.env only accessible in node
         console.log('Preparing to dispatch', queryParameters);
-        this.props.dispatch({ type: 'FETCH_SUMMONER', payload: queryParameters })
+        this.props.dispatch({ type: 'FETCH_SUMMONER', payload: queryParameters, history: this.props.history })
 
-        this.props.history.push(`/search/summonerName=${this.state.usernameInput}`);
+        // Set state to searching
+        this.setState({
+            isSearching: true
+        })
+
+
+
+        // this.props.history.push(`/search/summonerName=${this.state.usernameInput}`);
 
         // Clear input field
-        this.setState(
-            {
-                usernameInput: ''
-            }
-        )
+        // this.setState(
+        //     {
+        //         usernameInput: ''
+        //     }
+        // )
 
+    }
+
+    handleLoading = () => {
+
+        const isSearching = this.state.isSearching;
+
+        if(isSearching){
+            return(
+                <div className="bouncing-loader">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+            );
+        }
     }
 
     render() {
-        return (
-            <div style={{ justifyContent: 'center' }}>
-
-                <p className="DisplayText"> Helix<em>.GG</em></p>
-                <div className="searchBar">
-                    <input className='searchForm' onChange={this.handleChange} value={this.state.usernameInput} type="text" placeholder="Search summoner" spellCheck="false">
-                    </input>
-                    <div className="searchButton" onClick={this.handleSubmissionClick}>.GG</div>
+            return (
+                <div>
+                    <div style={{ justifyContent: 'center' }}>
+    
+                        <p className="DisplayText"> Helix<em>.GG</em></p>
+                        <div className="searchBar">
+                            <input className='searchForm' onChange={this.handleChange} value={this.state.usernameInput} type="text" placeholder="Search summoner" spellCheck="false">
+                            </input>
+                            <div className="searchButton" onClick={this.handleSubmissionClick}>.GG</div>
+                        </div>
+    
+    
+                    </div>
+                    {this.handleLoading()} }
                 </div>
-
-
-            </div>
-        );
+            );
     }
 }
 
-export default connect()(HomePage);
+export default withRouter(connect()(HomePage));

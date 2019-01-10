@@ -105,7 +105,8 @@ router.get('/:region/:summonerName', (req, res) => {
     let data = {};
 
     // Query riotgames for summoner by summoner name 
-    axios.get(`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}?api_key=${API_KEY}`).then(response => {
+    axios.get(`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}?api_key=${API_KEY}`)
+    .then(response => {
 
         // update summonerIDs for use as params for riot endpoints
         summonerId = response.data.id;
@@ -163,7 +164,6 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
 
     // Data to be sent to be used by client
     let summonerData = {
-        summonerName: '', // Official username (byRonE -> Byrone) Done
         matchResults: { wins: 0, losses: 0, winrate: '' }, // Winrate for past 20 games Done
         KDA: { kills: 0, deaths: 0, assists: 0, kdar: '' }, // DONE
         top3ChampData: [],  // KDA & WR for top 3 champs along with icon DONE

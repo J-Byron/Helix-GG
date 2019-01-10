@@ -6,10 +6,11 @@
     color: #00adb5;
     display: inline-block;
     font-family: 'Krungthep';
-    font-size: 11vw;
+    font-size: 9vw;
     margin: 200px 25% 0px 25%;
     text-align: center;
     width: 50%;
+    user-select: none;
     /* text-shadow: 0px 2px 12px #00adb5; */
 }
 
@@ -34,7 +35,8 @@
     font-size:16px;
     line-height:1.5;
     font-weight:800;
-    font-family: Arial, Helvetica, sans-serif;
+    /* font-family: Arial, Helvetica, sans-serif; */
+    font-family: 'Krungthep';
     text-indent:12px;
     width:100%;
     height:32px;
@@ -61,7 +63,7 @@
     align-items: center;
     justify-content: center;
 
-    box-shadow: 0px 2px #00737a;
+    box-shadow: 0px 3px #00737a;
 }
 
 .searchButton:hover {
@@ -110,3 +112,29 @@ input[type=text], .searchBar {
         width: 50%;
     }
 }
+
+@keyframes bouncing-loader {
+    to {
+      opacity: 0.1;
+      transform: translate3d(0, -1rem, 0);
+    }
+  }
+  .bouncing-loader {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+  }
+  .bouncing-loader > div {
+    width: 1rem;
+    height: 1rem;
+    margin: 3rem 0.2rem;
+    background: #0CA5B0;
+    border-radius: 50%;
+    animation: bouncing-loader 0.6s infinite alternate;
+  }
+  .bouncing-loader > div:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .bouncing-loader > div:nth-child(3) {
+    animation-delay: 0.4s;
+  }

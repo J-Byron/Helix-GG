@@ -1,0 +1,115 @@
+@import url(//db.onlinewebfonts.com/c/736cf5b08b01082a3645e14038868e20?family=Krungthep);
+
+.dropDownMenu {
+    width: 250px;
+    height: 200px;
+    background-color: #393e46;
+    position: absolute;
+    right:30px;
+    top: 55px;
+    border-radius: 4px;
+}
+
+.dropDownMenu-register{
+    width: 250px;
+    height: 250px;
+    background-color: #393e46;
+    position: absolute;
+    right:30px;
+    top: 55px;
+    border-radius: 4px;
+}
+
+/* .upper{
+    height: 70%;
+    width: 100%;
+    align-content: center;
+    justify-content: center;
+    display: inline;
+    margin-bottom: 10px;
+} */
+
+.login-text {
+    margin: 15px 0px;
+    font-family: 'Krungthep';
+    font-size: 18px; 
+    color: #0CA5B0;
+}
+
+.error-text {
+    margin: 5px 0px;
+    font-family: 'Krungthep';
+    font-size: 8px; 
+    color: rgb(201, 57, 57);
+}
+
+.input-text, .signin-button {
+    text-align: center;
+    display: block;
+    width: 80%;
+    height: 20px;
+    margin: 5px 10%;
+}
+
+.input-text {
+    border-radius: 4px;
+    color: #363636;
+    font-size:10px;
+    line-height:1.5;
+    font-weight:900;
+    font-family:Arial, Helvetica, sans-serif;
+    text-align: left;
+    text-indent: 10px;
+}
+
+.input-text{
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+    outline: none;
+    border: 1px solid #ffffff;
+}
+
+.input-text:focus{
+    box-shadow: 0 0 5px rgb(14, 209, 223);
+    border: 1px solid #0CA5B0;
+  }
+
+
+.signin-button {
+    background-color: #00adb5;
+    cursor: pointer;
+    border-radius: 2px;
+    display: flex;
+    margin-right: 10px;
+    margin-top: 27px;
+
+    color: white;
+    font-weight:800;
+    font-family: 'Krungthep';
+    font-size: 12px;
+
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0px 2px #00737a;
+}
+
+.signin-button:active {
+    transform: translateY(2px);
+}
+
+.register-text {
+    font-family: 'Krungthep';
+    font-size: 10px;
+    color: #eeeeee;
+    margin: 10px 0px;
+}
+
+.create-account {
+    text-decoration: none;
+    cursor: pointer;
+    color: #00acb5bb;
+    font-style: normal;
+}
