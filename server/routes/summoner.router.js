@@ -164,7 +164,6 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
 
     // Data to be sent to be used by client
     let summonerData = {
-        summonerName: '', // Official username (byRonE -> Byrone) Done
         matchResults: { wins: 0, losses: 0, winrate: '' }, // Winrate for past 20 games Done
         KDA: { kills: 0, deaths: 0, assists: 0, kdar: '' }, // DONE
         top3ChampData: [],  // KDA & WR for top 3 champs along with icon DONE

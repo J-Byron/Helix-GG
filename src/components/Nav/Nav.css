@@ -14,6 +14,14 @@
   float: right;
 } 
 
+.logo {
+  float: left;
+  margin: 20px 0px 0px 30px;
+  background-image: url("./logo.png");
+  background-size: 50px;
+  height: 50px;
+  width: 50px;
+}
 /* Enter */
 
 .fade-enter {

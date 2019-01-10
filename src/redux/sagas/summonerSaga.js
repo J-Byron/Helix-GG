@@ -6,6 +6,11 @@ import { put as dispatch, takeLatest, takeEvery } from 'redux-saga/effects';
 
 function* fetchSummoner(action) {
     try {
+        // Reset Data
+        yield dispatch({type:'RESET_DATA'})
+        // yield dispatch({ type: 'SET_SUMMONER', payload: {}})
+        // yield dispatch({ type: 'SET_SUMMONER_HISTORY', payload: {}})
+
         // Prepare data for request
         const summonerName = action.payload.summonerName;
         const region = action.payload.region;
@@ -27,7 +32,8 @@ function* fetchSummoner(action) {
 
         // Dispatch returned summoner to summonerReducer
         yield dispatch({ type: 'SET_SUMMONER', payload: summonerResponseData })
-
+        yield action.history.push(`/search/summonerName=${summonerName}`);
+        
     } catch (error) {
         console.log(`Summoner get request failed:`, error);
     }
@@ -35,6 +41,7 @@ function* fetchSummoner(action) {
 
 function* fetchSummonerHistory(action) {
     try {
+        
         console.log('Fetch summoner history');
         // Prepare data for request
         const summonerName = action.payload.summonerName;

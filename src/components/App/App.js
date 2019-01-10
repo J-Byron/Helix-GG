@@ -8,6 +8,7 @@ import {
   Route,
   Redirect,
   Switch,
+  Link
 } from 'react-router-dom';
 
 // *----------* Redux *----------*
@@ -23,6 +24,7 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import AboutPage from '../AboutPage/AboutPage';
 import UserPage from '../UserPage/UserPage';
 import InfoPage from '../InfoPage/InfoPage';
+import { link } from 'fs';
 
 class App extends Component {
   componentDidMount() {
@@ -33,18 +35,30 @@ class App extends Component {
     return (
       <Router>
         <div>
-        <Nav />
+          <Nav />
           <Switch>
             {/* Nav will need access to profile route */}
 
             {/* Visiting localhost:3000 will redirect to localhost:3000/home*/}
             <Redirect exact from="/" to="/home" />
 
-            {/* Visiting /home will render the homepage component, regardless if logged in */}
             <Route path='/home' component={HomePage} />
 
-            {/* Visiting /Search (after a search) will render the search page  */}
-            <Route path='/search' component={() => { }} />
+            {/* Once data is loaded, render this page */}
+            <Route path='/search' component={() => { 
+              return(<div>
+
+              </div>)
+            }} />
+
+            {/* If summoner Data is loaded, go to summoner page, else show home */}
+
+            {/* {(this.props.summoner.isDataLoaded) ?
+             <Link to='/search'/> : <Link to="/home"/> 
+            } */}
+
+            {/* Visiting /Search (after a search) will render the search page 
+            <Route path='/search' component={() => { }} /> */}
 
             {/* Visiting /search will result in an error page, otherwise it will render the profile page of the user */}
             <ProtectedRoute path='/profile' component={() => { }} />
@@ -57,7 +71,11 @@ class App extends Component {
   }
 }
 
-export default connect()(App);
+const mapStoreToProps = store => ({
+  summoner: store.summoner
+})
+
+export default connect(mapStoreToProps)(App);
 
 {/*
           <Switch>

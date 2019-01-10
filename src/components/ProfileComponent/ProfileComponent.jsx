@@ -1,8 +1,11 @@
-// *----------*  *----------*
+// *----------* React app *----------*
 import React, { Component } from 'react'
 
-// *----------*  *----------*
+// *----------* Redux *----------*
 import { connect } from 'react-redux';
+
+// *----------* Router *----------*
+import { withRouter } from 'react-router-dom';
 
 // *----------* Styling *----------*
 import './ProfileComponent.css'
@@ -21,6 +24,11 @@ class ProfileComponent extends Component {
         showMenu: false,
     }
 
+    componentDidMount(){
+        // animate welcome user
+
+    }
+
     handleIconClick = () => {
         this.setState({ showMenu: !this.state.showMenu })
     }
@@ -35,6 +43,10 @@ class ProfileComponent extends Component {
 
     handleSettingsClick = () => {
 
+    }
+
+    handleLogoutClick = () => {
+        this.props.dispatch({type:'LOGOUT'});
     }
 
     render() {
@@ -59,6 +71,9 @@ class ProfileComponent extends Component {
                         <div className='option settings'>
                             Settings
                         </div>
+                        <div onClick={this.handleLogoutClick} className='option logout'>
+                            Logout
+                        </div>
                     </div>
                 </CSSTransition>
             </div>
@@ -70,4 +85,4 @@ const mapStoreToProps = reduxStore => ({
     user: reduxStore.user
 })
 
-export default connect(mapStoreToProps)(ProfileComponent);
+export default withRouter(connect(mapStoreToProps)(ProfileComponent));

@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 
 // *----------* Router *----------*
-import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 // *----------* Redux *----------*
 import { connect } from 'react-redux';
@@ -63,6 +63,14 @@ class Nav extends Component {
       <div>
         <div className="nav">
           {/* If user is loged in show profile Component */}
+          <div 
+            className="logo" 
+            onClick={()=>{
+              this.props.history.push('/');
+            }}
+            style={{cursor:'pointer'}}
+          />
+
           {this.props.user.id ?
 
             /* If true */
@@ -129,4 +137,4 @@ const mapStateToProps = state => ({
   user: state.user,
 });
 
-export default connect(mapStateToProps)(Nav);
+export default withRouter(connect(mapStateToProps)(Nav));
