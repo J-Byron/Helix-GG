@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 
 // *----------* Router *----------*
 import { withRouter } from "react-router";
-import LoginDropDown from '../LoginDropDown/LoginDropDown';
 
 // const themes = {
 //     light:{
@@ -66,6 +65,8 @@ class HomePage extends Component {
 
         // Dispatch query to redux --> API Requests need to be made on server side because of CORS & process.env only accessible in node
         console.log('Preparing to dispatch', queryParameters);
+        // console.log(this.props.history);
+        
         this.props.dispatch({ type: 'FETCH_SUMMONER', payload: queryParameters, history: this.props.history })
 
         // Set state to searching
@@ -115,7 +116,7 @@ class HomePage extends Component {
     
     
                     </div>
-                    {this.handleLoading()} }
+                    {this.handleLoading()}
                 </div>
             );
     }

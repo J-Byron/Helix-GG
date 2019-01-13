@@ -4,6 +4,7 @@ import axios from 'axios';
 // *----------* Saga *----------*
 import { put as dispatch, takeLatest, takeEvery } from 'redux-saga/effects';
 
+// *----------*  *----------*
 function* fetchSummoner(action) {
     try {
         // Reset Data
@@ -18,6 +19,7 @@ function* fetchSummoner(action) {
         // Request sent to summoner API to query riot games API with summoner name
         const summonerResponseData = yield axios.get(`/api/summoner/${region}/${summonerName}`)
 
+
         // Also dispatch action to FETCH_SUMMONER_HISTORY.
         // This will in turn dispatch history results to summonerReducer
         yield dispatch(
@@ -26,13 +28,14 @@ function* fetchSummoner(action) {
             payload:{
                 summonerName: summonerName,
                 region: region,
-                queueType: 'Normal' // Default
-                }
+                queueType: 'Normal', // Default
+                // history: action.payload.history
+                },
+            history: action.history
             })
 
         // Dispatch returned summoner to summonerReducer
         yield dispatch({ type: 'SET_SUMMONER', payload: summonerResponseData })
-        yield action.history.push(`/search/summonerName=${summonerName}`);
         
     } catch (error) {
         console.log(`Summoner get request failed:`, error);
@@ -53,14 +56,24 @@ function* fetchSummonerHistory(action) {
 
         // Dispatch returned summoner to summonerReducer
         yield dispatch({ type: 'SET_SUMMONER_HISTORY', payload: summonerHistoryResponseData })
+
+        //
+        yield action.history.push(`/search/summonerName=${summonerName}`);
+
     } catch (error) {
         console.log(`SummonerHistory get request failed:`, error);
     }
 }
 
+// *----------*  *----------*
+function* fetchSummonerReviews(){
+
+}
+
 function* summonerSaga() {
     yield takeEvery('FETCH_SUMMONER', fetchSummoner);
     yield takeLatest('FETCH_SUMMONER_HISTORY', fetchSummonerHistory);
+    yield takeLatest('FETCH_SUMMONER_REVIEWS', fetchSummonerReviews);
 }
 
 

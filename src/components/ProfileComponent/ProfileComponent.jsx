@@ -82,7 +82,7 @@ class ProfileComponent extends Component {
 }
 
 const mapStoreToProps = reduxStore => ({
-    user: reduxStore.user
+    user: reduxStore.user.user
 })
 
 export default withRouter(connect(mapStoreToProps)(ProfileComponent));

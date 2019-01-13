@@ -19,7 +19,7 @@ const UserPage = (props) => (
 // if you wanted you could write this code like this:
 // const mapStateToProps = ({user}) => ({ user });
 const mapStateToProps = state => ({
-  user: state.user,
+  user: state.user.user,
 });
 
 // this allows us to use <App /> in index.js

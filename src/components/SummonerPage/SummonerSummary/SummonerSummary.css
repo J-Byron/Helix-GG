@@ -1,0 +1,92 @@
+@import url(//db.onlinewebfonts.com/c/736cf5b08b01082a3645e14038868e20?family=Krungthep);
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+p {
+    user-select: none;
+}
+
+.summary-container {
+    background-color: #282f3a;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #00adb5;
+    border-radius: 3px;
+    box-shadow: 0px 3px #016166;
+    height: 300px;
+    margin: 120px 10% 0px 10%;
+    width: 80%;
+    display: flex;
+}
+
+.column1 {
+    width: 25%;
+    height: 300px;
+    /* background-color: antiquewhite; */
+    font-family: 'Krungthep';
+    text-align: center;
+}
+
+
+.summoner-rank{
+    color: #00adb5;
+}
+
+.column2 {
+    width: 25%;
+    height: 300px;
+    /* background-color: black; */
+    font-family: 'Roboto';
+}
+
+.review-player {
+    margin-top: 40px;
+    font-family: 'Krungthep';
+    color: #00adb5;
+    font-size: 12px;
+}
+
+.review-player:hover {
+    text-shadow: 0px 0px 5px #00adb5;
+    cursor: pointer;
+}
+
+.review-player:active {
+    transform: translateY(1px);
+}
+
+.column3 {
+    width: 50%;
+    height: 300px;
+    /* background-color: red; */
+}
+
+.summonerImage{
+    background-size: 150px;
+    width:150px;
+    height:150px;
+
+    display: block;
+    margin: 40px auto 0px auto;
+
+    border-style: solid;
+    border-width: 2px;
+    border-color: #00adb5;
+    border-radius: 3px;
+    box-shadow: 0px 0px 40px #000000;
+}
+
+.summonerImage:hover{
+    box-shadow: 0px 0px 20px #00adb5;
+}
+
+.summoner-label{
+    color: #eeeeee;
+}
+
+.favorite-player{
+    margin-left: 10px;
+    color: #FE4365;
+    font-style: normal;
+    cursor: pointer;
+}
+

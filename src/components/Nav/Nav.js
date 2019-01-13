@@ -16,7 +16,7 @@ import ProfileComponent from '../ProfileComponent/ProfileComponent';
 
 // *----------* Styling *----------*
 import './Nav.css';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { CSSTransition} from 'react-transition-group';
 
 //  {/* Show this link if they are logged in or not,
 //         but call this link 'Home' if they are logged in,
@@ -111,30 +111,8 @@ class Nav extends Component {
   }
 }
 
-{/* <Link style={{textDecoration: 'none'}}className="nav-link" to="/home">
-        {props.user.id ? 'Home' : (<LoginButton/>)}
-        {}
-      </Link> */}
-
-{/* {props.user.id && (
-        <>
-          <Link className="nav-link" to="/info">
-            Info Page
-          </Link>
-          <LogOutButton className="nav-link"/>
-        </>
-      )}
-      
-      <Link className="nav-link" to="/about">
-        About
-      </Link> */}
-// Instead of taking everything from state, we just want the user
-// object to determine if they are logged in
-// if they are logged in, we show them a few more links 
-// if you wanted you could write this code like this:
-// const mapStateToProps = ({ user }) => ({ user });
 const mapStateToProps = state => ({
-  user: state.user,
+  user: state.user.user,
 });
 
 export default withRouter(connect(mapStateToProps)(Nav));
