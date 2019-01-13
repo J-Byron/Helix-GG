@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 // *----------* Page Components *----------*
 import ReviewDropDown from './ReviewDropDown/ReviewDropDown';
+import SummonerReviewComponent from './SummonerReviewComponent/SummonerReviewComponent'
 
 // *----------* Styling *----------*
 import './SummonerSummary.css'
@@ -13,12 +14,6 @@ import './SummonerSummary.css'
 class SummonerSummary extends Component {
     state = {
         showReviewForm: false,
-        showFavorite: true,
-    }
-
-    componentDidMount() {
-        
-
     }
 
     handleFavoriteClick = () => {
@@ -29,10 +24,6 @@ class SummonerSummary extends Component {
                 userId: this.props.user.user.id,
                 summonerName: this.props.summoner.summonerName
             }
-        })
-
-        this.setState({
-            showFavorite: false
         })
     }
 
@@ -51,7 +42,7 @@ class SummonerSummary extends Component {
         console.log(`DID REVIEW = ${didReview}`);
         
 
-        if(this.props.user.user.id && !didReview){
+        if(this.props.user.user.id && !didReview && (this.props.summoner.summonerName != this.props.user.user.summoner_Name)){
             return true;
         }else{
             return false;
@@ -72,13 +63,6 @@ class SummonerSummary extends Component {
     }
 
     render() {
-        // Check if favoritable
-        // if((this.props.user.favorites.)){
-        //     this.setState({
-        //         showFavorite: false
-        //     })
-        // }
-
         return (
             <div className='summary-container'>
                 <div className='column1'>
@@ -101,6 +85,11 @@ class SummonerSummary extends Component {
                     </p>
 
                 </div>
+                <div className='column3'>
+                    {/* Reviews */}
+                    <SummonerReviewComponent/>
+                </div>
+                
                 <div className='column2'>
                     
                     {/* Review player */}
@@ -116,16 +105,13 @@ class SummonerSummary extends Component {
                         </div>
                     }
                 </div>
-                <div className='column3'>
-                    {/* Reviews */}
-                </div>
             </div>
         );
     }
 }
 
 const mapStoreToProps = store => ({
-    summoner: store.summoner.summoner.data,
+    summoner: store.summoner.summoner,
     user: store.user
 })
 

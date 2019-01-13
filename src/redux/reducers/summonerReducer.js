@@ -2,7 +2,7 @@
 // Going to need to trim summoner data somewhere
 
 
-const summonerReducer = (state = {summoner:{},summonerHistory:{}}, action) => {
+const summonerReducer = (state = {summoner:{},summonerHistory:{}, reviews:[]}, action) => {
     switch (action.type) {
       case 'SET_SUMMONER':
         return {...state, summoner: action.payload} ;
@@ -10,6 +10,8 @@ const summonerReducer = (state = {summoner:{},summonerHistory:{}}, action) => {
         return {...state, summonerHistory: action.payload}
       case 'RESET_DATA':
         return {summoner:{},summonerHistory:{}}
+      case 'SET_SUMMONER_REVIEWS':
+        return {...state, reviews: action.payload}
       default:
         return state;
     }

@@ -56,7 +56,7 @@ router.post('/favorite', (req,res)=>{
     res.sendStatus(204);
   }).catch(err =>{
     console.log(`Error in post ../user/favorites: ${err}`);
-    res.sendStatus(400);
+    res.sendStatus(500);
   })
 })
 
@@ -69,7 +69,7 @@ router.get('/:id/favorites', (req,res) =>{
     res.send(result.rows);
   }).catch(err =>{
     console.log(`Error in  get ../user/id/favorites: ${err}`);
-    res.sendStatus(400);
+    res.sendStatus(500);
   })
 })
 
@@ -88,7 +88,7 @@ router.post('/review',(req,res)=>{
     res.sendStatus(204)
   }).catch(err=>{
     console.log(`Error in post ../user/review: ${err}`);
-    res.sendStatus(400);
+    res.sendStatus(500);
   })
 
 })
@@ -106,7 +106,7 @@ router.get('/:id/reviews', (req,res) => {
     res.send(result.rows);
   }).catch(err =>{
     console.log(`Error in  get ../user/id/reviews: ${err}`);
-    res.sendStatus(400);
+    res.sendStatus(500);
   })
 })
 
