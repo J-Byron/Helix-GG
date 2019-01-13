@@ -45,8 +45,11 @@ function* postReview(action){
     // Notify user of success/failure
 
 
-    // Update reviews
+    // Update user reviews
     yield dispatch({ type: 'FETCH_USER_REVIEWS', payload:id})
+
+    // Update summoner Reviews
+    yield dispatch({type:'FETCH_SUMMONER_REVIEWS', payload:summonerName})
 
     // console.log(rating,reviewContent,summonerName);
 

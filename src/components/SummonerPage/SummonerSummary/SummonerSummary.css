@@ -6,7 +6,7 @@ p {
 }
 
 .summary-container {
-    background-color: #282f3a;
+    background-color: #ebebeb;
     border-style: solid;
     border-width: 2px;
     border-color: #00adb5;
@@ -24,6 +24,9 @@ p {
     /* background-color: antiquewhite; */
     font-family: 'Krungthep';
     text-align: center;
+    background-color: #282f3a;
+    border-radius: 0px 3px 3px 0px;
+    box-shadow: 2px 0px 5px #232a33;
 }
 
 
@@ -70,14 +73,14 @@ p {
 
     border-style: solid;
     border-width: 2px;
-    border-color: #00adb5;
+    border-color: #998a05;
     border-radius: 3px;
     box-shadow: 0px 0px 40px #000000;
 }
 
-.summonerImage:hover{
-    box-shadow: 0px 0px 20px #00adb5;
-}
+/* .summonerImage:hover{
+    box-shadow: 0px 0px 20px #998a05;
+} */
 
 .summoner-label{
     color: #eeeeee;

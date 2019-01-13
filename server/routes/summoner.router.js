@@ -1,6 +1,7 @@
 // *----------* Modules *----------*
 const express = require('express');
 const router = express.Router();
+const pool = require('../modules/pool');
 const axios = require('axios');
 require('dotenv').config();
 
@@ -17,7 +18,7 @@ const D_VERSION = process.env.DDRAGON_VERSION; // ddragon version
 
         -Queue Types-
 
-        400: Draft 
+        500: Draft 
         420: Ranked
         450: ARAM
         440: Flex
@@ -37,7 +38,7 @@ const D_VERSION = process.env.DDRAGON_VERSION; // ddragon version
 
     */
 
-// *----------* Static Data (to be moved) *----------*
+// *----------* Local Data (to be moved) *----------*
 
 // objects to hold all champions/spells/tunes and their associated ids ( used for finding images )
 let champions = {};
@@ -89,10 +90,31 @@ axios.get(`http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/data/en_US/runesR
     console.log(error);
 })
 
-
-
-
 // *----------* Routes *----------*
+
+    // *----------* Helix Database *----------*
+
+router.get('/reviews/:summonerName',(req,res)=>{
+
+    // Query arguments
+    const summonerName = req.params.summonerName;
+
+    // SQL query string
+    const queryString = 
+    `SELECT "reviewed_summonerName", "User"."summoner_Name" ,"rating", "content" 
+    FROM "Review" JOIN "User" ON "User"."id" = "Review"."reviewing_user_id"
+    where UPPER("reviewed_summonerName") = UPPER($1);`;
+
+    //
+    pool.query(queryString,[summonerName]).then(result=>{
+        res.send(result.rows);
+    }).catch(err=>{
+        console.log(`Error in /api/summoner/:summonerName/reviews: `, err);
+        res.sendStatus(500);
+    })
+})
+
+    // *----------* Riot Games Database *----------*
 
 // Endpoint for header Data
 router.get('/:region/:summonerName', (req, res) => {
@@ -139,11 +161,11 @@ router.get('/:region/:summonerName', (req, res) => {
                 res.send(data);
             }).catch(error => {
                 console.log(error);
-                res.sendStatus(400);
+                res.sendStatus(500);
             })
     }).catch(error => {
         console.log(error);
-        res.sendStatus(400);
+        res.sendStatus(500);
     })
 })
 
@@ -355,7 +377,7 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
 
                             }).catch(error => {
                                 console.log(error);
-                                res.sendStatus(400);
+                                res.sendStatus(500);
                             })
 
                     }// End of matchlist for loop
@@ -402,16 +424,15 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
 
             }).catch(error => {
                 console.log(error);
-                res.sendStatus(400);
+                res.sendStatus(500);
             })
 
     }).catch(error => {
         // res.send({didSucceed: false, data: null})\
         console.log(error);
-        res.sendStatus(400);
+        res.sendStatus(500);
     })
 })
 
-// *----------* helix CRUD *----------*
 
 module.exports = router;
