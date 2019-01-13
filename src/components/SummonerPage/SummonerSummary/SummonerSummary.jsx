@@ -17,17 +17,7 @@ class SummonerSummary extends Component {
     }
 
     componentDidMount() {
-        // If user already favorited the displayed summoner, do not give ability to favorite
-        const favorites = this.props.user.favorites;
-        if ((favorites.indexOf(this.props.summoner.summonerName) > -1) && this.props.user.user.id) {
-            this.setState({
-                showFavorite: false
-            })
-        }else if(!this.props.user.user.id){
-            this.setState({
-                showFavorite: false
-            })
-        }
+        
 
     }
 
@@ -53,6 +43,34 @@ class SummonerSummary extends Component {
         })
     }
 
+    canLeaveReview = () =>{
+        // Check if this user has reviewed the current summoner being displayed
+        const didReview = (this.props.user.reviews.map(review => review.reviewed_summonerName)
+        .indexOf(this.props.summoner.summonerName) > -1);
+
+        console.log(`DID REVIEW = ${didReview}`);
+        
+
+        if(this.props.user.user.id && !didReview){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    canFavorite = () => {
+        // If user already favorited the displayed summoner, do not give ability to favorite
+        const favorites = this.props.user.favorites;
+        if ((favorites.indexOf(this.props.summoner.summonerName) > -1) && this.props.user.user.id) {
+                return false
+        }else if(!this.props.user.user.id){
+                return false
+        }
+        else{
+            return true
+        }
+    }
+
     render() {
         // Check if favoritable
         // if((this.props.user.favorites.)){
@@ -72,8 +90,8 @@ class SummonerSummary extends Component {
                     <p className='summoner-label'> {
                         this.props.summoner.summonerName}
 
-                        {/* If logged in : Favorite */}
-                        {this.state.showFavorite &&
+                        {/* Favorite */}
+                        {this.canFavorite() &&
                             <em className='favorite-player' onClick={this.handleFavoriteClick}> ★ </em>
                         }
                     </p>
@@ -84,15 +102,14 @@ class SummonerSummary extends Component {
 
                 </div>
                 <div className='column2'>
-                    {/* <div className='rating'>
-                        {'Rating: 5'}
-                    </div> */}
-                    {/* If logged in and summoner is in match history: Review player */}
-                    {this.props.user.user.id &&
+                    
+                    {/* Review player */}
+                    {this.canLeaveReview() &&
                         <div>
                             <p className='review-player' onClick={this.handleReviewPlayerClick}> Write a review </p>
 
                             <ReviewDropDown 
+                                userId={this.props.user.user.id}
                                 summonerName={this.props.summoner.summonerName}
                                 showReviewForm={this.state.showReviewForm} 
                                 toggleReviewForm = {this.handleReviewPlayerClick}/>

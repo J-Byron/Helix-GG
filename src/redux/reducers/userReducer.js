@@ -1,6 +1,6 @@
 
 
-const userReducer = (state = { user: {}, favorites: [], reviews: [] }, action) => {
+const userReducer = (state = { user: {}, favorites: [], reviews: [], userSummonerName:''}, action) => {
   switch (action.type) {
     case 'SET_USER':
       return { ...state, user: action.payload };
@@ -8,7 +8,7 @@ const userReducer = (state = { user: {}, favorites: [], reviews: [] }, action) =
       return { ...state, user: {} };
     case 'SET_FAVORITES':
       return { ...state, favorites: action.payload }
-    case 'SET_REVIEWS':
+    case 'SET_USER_REVIEWS':
       return { ...state, reviews: action.payload }
     default:
       return state;

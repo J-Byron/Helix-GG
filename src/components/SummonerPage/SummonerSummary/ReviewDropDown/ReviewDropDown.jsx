@@ -25,11 +25,12 @@ class ReviewDropDown extends Component {
         // Trigger unmount animation
         // this.props.toggleReviewForm();
         console.log('Shipping ', this.state);
-
+        // summonerName, id, rating, reviewContent
         this.props.dispatch({
             type:'POST_REVIEW',
             payload: {
                 summonerName: this.props.summonerName,
+                id: this.props.userId,
                 rating: this.state.rating,
                 reviewContent: this.state.reviewContent
             }

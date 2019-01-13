@@ -23,6 +23,8 @@ function* fetchUser() {
 
     // After user signed in, fetch all user data
     yield dispatch({type:'FETCH_FAVORITES', payload: response.data.id});
+    yield dispatch({ type: 'FETCH_USER_REVIEWS', payload: response.data.id})
+
 
 
   } catch (error) {
@@ -35,13 +37,16 @@ function* postReview(action){
   try {
 
     // Destructure data from payload
-    const {rating, reviewContent, summonerName} = action.payload;
+    const {summonerName, id, rating, reviewContent} = action.payload;
 
     // Send request to API
-    yield axios.post('/api/user/reviews', {rating,reviewContent,summonerName})
+    yield axios.post('/api/user/review', {summonerName, id, rating, reviewContent})
+
+    // Notify user of success/failure
+
 
     // Update reviews
-    yield dispatch({ type: 'FETCH_USER_REVIEWS'})
+    yield dispatch({ type: 'FETCH_USER_REVIEWS', payload:id})
 
     // console.log(rating,reviewContent,summonerName);
 
@@ -51,11 +56,21 @@ function* postReview(action){
 }
 
 // Fetch user's reviews
-function* fetchUserReviews(){
+function* fetchUserReviews(action){
   try {
+
+    const id = action.payload;
+
     // pass query params to API call
+    const reviewRespnse = yield axios.get(`/api/user/${id}/reviews`);
+
+    yield dispatch({
+      type: 'SET_USER_REVIEWS',
+      payload: reviewRespnse.data
+    })
+
   } catch (error) {
-    
+    console.log(`Error in fetchUserReviews:`, error);
   }
 }
 
@@ -70,7 +85,7 @@ function* postFavoriteSummoner(action){
     const summonerName = action.payload.summonerName;
 
     // post data to ../../favorite endpoint
-    yield axios.post('/api/user/favorites', {userId, summonerName})
+    yield axios.post('/api/user/favorite', {userId, summonerName})
 
     // notify user of update (?)
 

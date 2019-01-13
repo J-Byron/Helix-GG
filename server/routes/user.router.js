@@ -45,7 +45,7 @@ router.post('/logout', (req, res) => {
 // *----------* helix CRUD *----------*
 
 //
-router.post('/favorites', (req,res)=>{
+router.post('/favorite', (req,res)=>{
 
   const summonerName = req.body.summonerName;
   const userId = req.body.userId;
@@ -74,17 +74,40 @@ router.get('/:id/favorites', (req,res) =>{
 })
 
 //
+router.post('/review',(req,res)=>{
+
+  // Destructure content of req.body
+  const {summonerName, id, rating, reviewContent} = req.body;
+
+  // Create SQL query string
+  const queryString = 'INSERT INTO "Review" ("reviewed_summonerName","reviewing_user_id","rating","content") VALUES ($1,$2,$3,$4);';
+
+  // Post data to database and handle error
+  pool.query(queryString,[summonerName, id, rating, reviewContent])
+  .then(()=>{
+    res.sendStatus(204)
+  }).catch(err=>{
+    console.log(`Error in post ../user/review: ${err}`);
+    res.sendStatus(400);
+  })
+
+})
+
+//
 router.get('/:id/reviews', (req,res) => {
+  //
   const userId = req.params.id;
+
+  //
   const queryString = `SELECT * FROM "Review" where "reviewing_user_id" = $1;`;
 
+  //
   pool.query(queryString, [userId]).then(result =>{
     res.send(result.rows);
   }).catch(err =>{
     console.log(`Error in  get ../user/id/reviews: ${err}`);
     res.sendStatus(400);
   })
-
 })
 
 module.exports = router;
