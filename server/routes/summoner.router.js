@@ -109,8 +109,8 @@ router.get('/:region/:summonerName', (req, res) => {
     .then(response => {
 
         // update summonerIDs for use as params for riot endpoints
-        summonerId = response.data.id;
-        profileIconId = response.data.profileIconId;
+        let summonerId = response.data.id;
+        let profileIconId = response.data.profileIconId;
 
         // Update summonerData with info from response
         data.summonerName = response.data.name;
@@ -411,5 +411,7 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
         res.sendStatus(400);
     })
 })
+
+// *----------* helix CRUD *----------*
 
 module.exports = router;

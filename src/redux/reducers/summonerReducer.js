@@ -5,9 +5,9 @@
 const summonerReducer = (state = {summoner:{},summonerHistory:{}}, action) => {
     switch (action.type) {
       case 'SET_SUMMONER':
-        return {summoner: action.payload} ;
+        return {...state, summoner: action.payload} ;
       case 'SET_SUMMONER_HISTORY':
-        return {... state, summonerHistory: action.payload}
+        return {...state, summonerHistory: action.payload}
       case 'RESET_DATA':
         return {summoner:{},summonerHistory:{}}
       default:

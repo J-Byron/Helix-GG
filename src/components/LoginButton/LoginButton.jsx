@@ -1,12 +1,6 @@
 // *----------* Create React App *----------*
 import React, { Component } from 'react';
 
-// *----------* Router *----------*
-import { withRouter } from 'react-router-dom';
-
-// *----------*  *----------*
-import { connect } from 'react-redux';
-
 // *----------* Styling *----------*
 import './LoginButton.css';
 

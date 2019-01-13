@@ -76,19 +76,19 @@
 
 
 /* Highlight effect on search From */
-input[type=text], .searchBar {
+.searchForm {
     -webkit-transition: all 0.30s ease-in-out;
     -moz-transition: all 0.30s ease-in-out;
     -ms-transition: all 0.30s ease-in-out;
     -o-transition: all 0.30s ease-in-out;
     outline: none;
-    border: 1px solid #ffffff;
+    border: 0px solid #ffffff;
   }
 
-  input[type=text]:focus + .searchBar {
+  /* input[type=text]:focus + .searchBar {
     box-shadow: 0 0 5px #0CA5B0;
     border: 1px solid #0CA5B0;
-  }
+  } */
   /* 0CA5B0  rgba(81, 203, 238, 1)*/
 
 
