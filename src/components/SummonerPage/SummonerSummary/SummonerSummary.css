@@ -6,7 +6,7 @@ p {
 }
 
 .summary-container {
-    background-color: #ebebeb;
+    background-color: #232a33;
     border-style: solid;
     border-width: 2px;
     border-color: #00adb5;
@@ -26,7 +26,7 @@ p {
     text-align: center;
     background-color: #282f3a;
     border-radius: 0px 3px 3px 0px;
-    box-shadow: 2px 0px 5px #232a33;
+    /* box-shadow: 2px 0px 5px #232a33; */
 }
 
 

@@ -35,9 +35,9 @@ class HomePage extends Component {
         console.log('HomePage mounted');
     }
 
-    componentWillMount(){
+    componentWillMount() {
         console.log('will mount');
-        
+
     }
 
     handleChange = (event) => {
@@ -66,7 +66,7 @@ class HomePage extends Component {
         // Dispatch query to redux --> API Requests need to be made on server side because of CORS & process.env only accessible in node
         console.log('Preparing to dispatch', queryParameters);
         // console.log(this.props.history);
-        
+
         this.props.dispatch({ type: 'FETCH_SUMMONER', payload: queryParameters, history: this.props.history })
 
         // Set state to searching
@@ -91,34 +91,41 @@ class HomePage extends Component {
 
         const isSearching = this.state.isSearching;
 
-        if(isSearching){
-            return(
-                <div className="bouncing-loader">
+        if (isSearching) {
+            return (
+                <div className='helix-container'>
+                    <div className="bouncing-loader">
                         <div></div>
                         <div></div>
                         <div></div>
                     </div>
+                    {/* <div className="bouncing-loader-white">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div> */}
+                </div>
             );
         }
     }
 
     render() {
-            return (
-                <div>
-                    <div style={{ justifyContent: 'center' }}>
-    
-                        <p className="DisplayText"> Helix<em>.GG</em></p>
-                        <div className="searchBar">
-                            <input className='searchForm' onChange={this.handleChange} value={this.state.usernameInput} type="text" placeholder="Search summoner" spellCheck="false">
-                            </input>
-                            <div className="searchButton" onClick={this.handleSubmissionClick}>.GG</div>
-                        </div>
-    
-    
+        return (
+            <div>
+                <div style={{ justifyContent: 'center' }}>
+
+                    <p className="DisplayText"> Helix<em>.GG</em></p>
+                    <div className="searchBar">
+                        <input className='searchForm' onChange={this.handleChange} value={this.state.usernameInput} type="text" placeholder="Search summoner" spellCheck="false">
+                        </input>
+                        <div className="searchButton" onClick={this.handleSubmissionClick}>.GG</div>
                     </div>
-                    {this.handleLoading()}
+
+
                 </div>
-            );
+                {this.handleLoading()}
+            </div>
+        );
     }
 }
 

@@ -2,36 +2,45 @@
 import React, { Component } from 'react'
 
 // *----------* Redux *----------*
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
 // *----------* Page components *----------*
 import ReviewListItem from './ReviewListItem/ReviewListItem'
 
 // *----------* Styling *----------*
-import {CSSTransition, TransitionGroup} from 'react-transition-group';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import './SummonerReviewComponent.css'
 
 class SummonerReviewComponent extends Component {
-    render(){
-        const reviewList = this.props.reviews.map((review,index) => {
-            return(
-                <TransitionGroup key={index}>
-                    <CSSTransition
-                        key={index}
-                        timeout={1000}
-                        classNames='fade-item'
-                    >
-                    <ReviewListItem review={review}/>
-                    </CSSTransition>
-                </TransitionGroup>
-            );
-        })
+    render() {
 
-        return(
+        return (
+            <div>
+            <p className='recent-reviews'>
+                Recent Reviews
+            </p>
             <div className='review-container'>
-                <ul className='review-list'>
-                    {reviewList}
-                </ul>
+                    <TransitionGroup className='review-list'>
+                        {
+                            this.props.reviews.map((review, index) => (
+
+                                <CSSTransition
+                                    appear={true}
+                                    // in={true}
+                                    key={index}
+                                    timeout={2000}
+                                    classNames='itemfade'
+                                    mountOnEnter
+                                    unmountOnExit
+                                    onEntered={()=>console.log('Entered')}
+                                >
+                                    <ReviewListItem review={review} />
+                                </CSSTransition>
+
+                            ))
+                        }
+                    </TransitionGroup>
+            </div>
             </div>
         )
     }

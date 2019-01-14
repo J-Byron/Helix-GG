@@ -9,7 +9,7 @@ const summonerReducer = (state = {summoner:{},summonerHistory:{}, reviews:[]}, a
       case 'SET_SUMMONER_HISTORY':
         return {...state, summonerHistory: action.payload}
       case 'RESET_DATA':
-        return {summoner:{},summonerHistory:{}}
+        return {summoner:{},summonerHistory:{}, reviews:[]}
       case 'SET_SUMMONER_REVIEWS':
         return {...state, reviews: action.payload}
       default:
