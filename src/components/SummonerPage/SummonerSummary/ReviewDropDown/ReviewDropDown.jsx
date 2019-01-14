@@ -75,7 +75,7 @@ class ReviewDropDown extends Component {
             // onExiting={() => console.log("Leaving")}
             >
                 <div>
-                    <div className='review-container'>
+                    <div className='create-review-container'>
                         {/* Ratings */}
                         <p className='ratings'>
                             <em className={this.ratingRuleFor(1)} onClick={()=>this.handleRatingClick(1)}>
@@ -96,7 +96,13 @@ class ReviewDropDown extends Component {
                         </p>
 
                         {/* Message */}
-                        <textarea value={this.state.reviewContent} className='review-message' type="text" placeholder='ex. Good Map Awareness' onChange={this.handleInputChange}/>
+                        <textarea  
+                            maxlength="25" 
+                            value={this.state.reviewContent} 
+                            className='review-message' 
+                            type="text" 
+                            placeholder='ex. Good Map Awareness' 
+                            onChange={this.handleInputChange}/>
                         {/* Submit */}
                     </div >
                     <div className='review-submit-button' onClick={this.handleSubmitDidClick}>

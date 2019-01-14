@@ -103,7 +103,8 @@ router.get('/reviews/:summonerName',(req,res)=>{
     const queryString = 
     `SELECT "reviewed_summonerName", "User"."summoner_Name" ,"rating", "content" 
     FROM "Review" JOIN "User" ON "User"."id" = "Review"."reviewing_user_id"
-    where UPPER("reviewed_summonerName") = UPPER($1);`;
+    where UPPER("reviewed_summonerName") = UPPER($1)
+    ORDER BY "User"."id" DESC;`;
 
     //
     pool.query(queryString,[summonerName]).then(result=>{
