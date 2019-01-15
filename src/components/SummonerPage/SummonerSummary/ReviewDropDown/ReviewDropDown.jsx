@@ -97,7 +97,7 @@ class ReviewDropDown extends Component {
 
                         {/* Message */}
                         <textarea  
-                            maxlength="25" 
+                            maxLength="25" 
                             value={this.state.reviewContent} 
                             className='review-message' 
                             type="text" 

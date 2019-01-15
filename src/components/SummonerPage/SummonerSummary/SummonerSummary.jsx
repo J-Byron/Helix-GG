@@ -6,7 +6,10 @@ import { connect } from 'react-redux';
 
 // *----------* Page Components *----------*
 import ReviewDropDown from './ReviewDropDown/ReviewDropDown';
-import SummonerReviewComponent from './SummonerReviewComponent/SummonerReviewComponent'
+import SummonerReviewComponent from './SummonerReviewComponent/SummonerReviewComponent';
+
+// *----------* Components *----------*
+import { ResponsivePie } from '@nivo/pie';
 
 // *----------* Styling *----------*
 import './SummonerSummary.css'
@@ -22,7 +25,7 @@ class SummonerSummary extends Component {
             type: 'POST_FAVORITE_SUMMONER',
             payload: {
                 userId: this.props.user.user.id,
-                summonerName: this.props.summoner.summonerName
+                summonerName: this.props.summoner.summoner.summonerName
             }
         })
     }
@@ -34,17 +37,17 @@ class SummonerSummary extends Component {
         })
     }
 
-    canLeaveReview = () =>{
+    canLeaveReview = () => {
         // Check if this user has reviewed the current summoner being displayed
         const didReview = (this.props.user.reviews.map(review => review.reviewed_summonerName)
-        .indexOf(this.props.summoner.summonerName) > -1);
+            .indexOf(this.props.summoner.summoner.summonerName) > -1);
 
         console.log(`DID REVIEW = ${didReview}`);
-        
 
-        if(this.props.user.user.id && !didReview && (this.props.summoner.summonerName != this.props.user.user.summoner_Name)){
+
+        if (this.props.user.user.id && !didReview && (this.props.summoner.summoner.summonerName != this.props.user.user.summoner_Name)) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -52,27 +55,37 @@ class SummonerSummary extends Component {
     canFavorite = () => {
         // If user already favorited the displayed summoner, do not give ability to favorite
         const favorites = this.props.user.favorites;
-        if ((favorites.indexOf(this.props.summoner.summonerName) > -1) && this.props.user.user.id) {
-                return false
-        }else if(!this.props.user.user.id){
-                return false
+        if ((favorites.indexOf(this.props.summoner.summoner.summonerName) > -1) && this.props.user.user.id) {
+            return false
+        } else if (!this.props.user.user.id) {
+            return false
         }
-        else{
+        else {
             return true
         }
     }
 
+    hasData = () => {
+        if (this.props.summoner.summonerHistory.hasOwnProperty('matchResults')) {
+            return true;
+        }
+        return false;
+    }
+
     render() {
+
+        const { wins, losses } = (this.hasData()) ? this.props.summoner.summonerHistory.matchResults : { wins: 3, losses: 1 };
+
         return (
             <div className='summary-container'>
                 <div className='column1'>
 
                     {/* Icon / rating */}
-                    <div style={{ backgroundImage: `url(${this.props.summoner.profileIcon})` }} className='summonerImage' />
+                    <div style={{ backgroundImage: `url(${this.props.summoner.summoner.profileIcon})` }} className='summonerImage' />
 
                     {/* Summoner Name / rank / Level */}
                     <p className='summoner-label'> {
-                        this.props.summoner.summonerName}
+                        this.props.summoner.summoner.summonerName}
 
                         {/* Favorite */}
                         {this.canFavorite() &&
@@ -81,18 +94,17 @@ class SummonerSummary extends Component {
                     </p>
 
                     <p className='summoner-rank'>
-                        {this.props.summoner.rank}
+                        {this.props.summoner.summoner.rank}
                     </p>
 
                 </div>
                 <div className='column3'>
                     {/* Reviews */}
-                    <SummonerReviewComponent/>
+                    <SummonerReviewComponent />
                 </div>
-                
-                <div className='column2'>
-                    
-                    {/* Review player */}
+
+                {/* <div className='column2'>
+
                     {this.canLeaveReview() &&
                         <div>
                             <p className='review-player' onClick={this.handleReviewPlayerClick}> Write a review </p>
@@ -104,14 +116,16 @@ class SummonerSummary extends Component {
                                 toggleReviewForm = {this.handleReviewPlayerClick}/>
                         </div>
                     }
-                </div>
+
+
+                </div> */}
             </div>
         );
     }
 }
 
 const mapStoreToProps = store => ({
-    summoner: store.summoner.summoner,
+    summoner: store.summoner,
     user: store.user
 })
 
