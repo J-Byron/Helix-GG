@@ -44,17 +44,13 @@ class App extends Component {
 
             <Route path='/home' component={HomePage} />
 
-            {/* Once data is loaded, render this page else 404*/}
-            <Route path='/search' component={SummonerPage}/>
+            {/* If data is loaded on when directing to '/search' go to summonerPage 
+                else return home */}
 
-            {/* If summoner Data is loaded, go to summoner page, else show home */}
-
-            {/* {(this.props.summoner.isDataLoaded) ?
-             <Link to='/search'/> : <Link to="/home"/> 
-            } */}
-
-            {/* Visiting /Search (after a search) will render the search page 
-            <Route path='/search' component={() => { }} /> */}
+            <Route path='/search' render={()=> (
+              this.props.summoner.isLoaded ? ( <SummonerPage/>) : ( <Redirect to="/home"/> )
+            )
+          }/>
 
             {/* Visiting /search will result in an error page, otherwise it will render the profile page of the user */}
             <ProtectedRoute path='/profile' component={() => { }} />
