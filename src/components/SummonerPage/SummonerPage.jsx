@@ -6,7 +6,8 @@ import {connect} from 'react-redux';
 
 // *----------* Page Components *----------*
 import SummonerSummary from './SummonerSummary/SummonerSummary';
-import SummonerHistory from './SummonerHistory/SummonerHistory'
+import SummonerGameSummary from './SummonerGameSummary/SummonerGameSummary';
+import SummonerHistory from './SummonerHistory/SummonerHistory';
 
 // *----------* Styling *----------*
 import './SummonerPage.css';
@@ -41,6 +42,10 @@ class SummonerPage extends Component{
 
                 {/* Summary Component*/}
                 <SummonerSummary/>
+
+                {/* Analytics */}
+                < SummonerGameSummary />
+                {/*  */}
 
                 {/* Match History Component*/}
                 {/* <SummonerHistory/> */}
