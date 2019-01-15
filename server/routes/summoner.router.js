@@ -396,7 +396,7 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
                     // Calculate Winrate after all match results calculated
                     summonerData.matchResults.winrate = `${
                         ((summonerData.matchResults.wins /
-                            (summonerData.matchResults.wins + summonerData.matchResults.losses)) * 100).toFixed(2)
+                            (summonerData.matchResults.wins + summonerData.matchResults.losses)) * 100).toFixed(1)
                         }%`
 
                     // Calculate kill/death ration after all matches' KDAs calculated
