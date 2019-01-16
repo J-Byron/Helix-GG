@@ -1,6 +1,7 @@
 // *----------* Modules *----------*
 const express = require('express');
 const router = express.Router();
+const pool = require('../modules/pool');
 const axios = require('axios');
 require('dotenv').config();
 
@@ -17,7 +18,7 @@ const D_VERSION = process.env.DDRAGON_VERSION; // ddragon version
 
         -Queue Types-
 
-        400: Draft 
+        500: Draft 
         420: Ranked
         450: ARAM
         440: Flex
@@ -37,7 +38,7 @@ const D_VERSION = process.env.DDRAGON_VERSION; // ddragon version
 
     */
 
-// *----------* Static Data (to be moved) *----------*
+// *----------* Local Data (to be moved) *----------*
 
 // objects to hold all champions/spells/tunes and their associated ids ( used for finding images )
 let champions = {};
@@ -89,10 +90,32 @@ axios.get(`http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/data/en_US/runesR
     console.log(error);
 })
 
-
-
-
 // *----------* Routes *----------*
+
+    // *----------* Helix Database *----------*
+
+router.get('/reviews/:summonerName',(req,res)=>{
+
+    // Query arguments
+    const summonerName = req.params.summonerName;
+
+    // SQL query string
+    const queryString = 
+    `SELECT "reviewed_summonerName", "User"."summoner_Name" ,"rating", "content" 
+    FROM "Review" JOIN "User" ON "User"."id" = "Review"."reviewing_user_id"
+    where UPPER("reviewed_summonerName") = UPPER($1)
+    ORDER BY "User"."id" DESC;`;
+
+    //
+    pool.query(queryString,[summonerName]).then(result=>{
+        res.send(result.rows);
+    }).catch(err=>{
+        console.log(`Error in /api/summoner/:summonerName/reviews: `, err);
+        res.sendStatus(500);
+    })
+})
+
+    // *----------* Riot Games Database *----------*
 
 // Endpoint for header Data
 router.get('/:region/:summonerName', (req, res) => {
@@ -109,8 +132,8 @@ router.get('/:region/:summonerName', (req, res) => {
     .then(response => {
 
         // update summonerIDs for use as params for riot endpoints
-        summonerId = response.data.id;
-        profileIconId = response.data.profileIconId;
+        let summonerId = response.data.id;
+        let profileIconId = response.data.profileIconId;
 
         // Update summonerData with info from response
         data.summonerName = response.data.name;
@@ -139,11 +162,11 @@ router.get('/:region/:summonerName', (req, res) => {
                 res.send(data);
             }).catch(error => {
                 console.log(error);
-                res.sendStatus(400);
+                res.sendStatus(500);
             })
     }).catch(error => {
         console.log(error);
-        res.sendStatus(400);
+        res.sendStatus(500);
     })
 })
 
@@ -245,7 +268,7 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
                                     championStats.wins += (queriedMatchParticipant.stats.win) ? 1 : 0;
                                     championStats.loses += (queriedMatchParticipant.stats.win) ? 0 : 1;
                                     championStats.totalGamesPlayed++ ,
-                                        championStats.winrate = `${((championStats.wins / ((championStats.wins) + (championStats.loses))) * 100).toFixed(2)}%`;
+                                        championStats.winrate = `${((championStats.wins / ((championStats.wins) + (championStats.loses))) * 100).toFixed(1)}%`;
 
                                     championStats.kills += queriedMatchParticipant.stats.kills;
                                     championStats.averageKills = Number((championStats.kills / championStats.totalGamesPlayed).toFixed(2));
@@ -258,6 +281,9 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
 
                                     championStats.cs += (queriedMatchParticipant.stats.totalMinionsKilled + queriedMatchParticipant.stats.neutralMinionsKilled);
                                     championStats.averageCs = Number(((championStats.cs) / (championStats.totalGamesPlayed)).toFixed(2));
+
+                                    championStats.kdar = `${Number(((championStats.kills + championStats.assists)/championStats.deaths).toFixed(1))}:1`;
+
 
                                 } else {
                                     championHistory[champions[summonerChampionId]] = {
@@ -280,6 +306,11 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
                                         cs: (queriedMatchParticipant.stats.totalMinionsKilled + queriedMatchParticipant.stats.neutralMinionsKilled),
                                         averageCs: (queriedMatchParticipant.stats.totalMinionsKilled + queriedMatchParticipant.stats.neutralMinionsKilled),
                                     }
+                                    
+                                    const championStats = championHistory[champions[summonerChampionId]];
+
+                                    championStats.kdar = `${Number(((championStats.kills + championStats.assists)/ championStats.kills).toFixed(1))}:1`
+
                                 }
 
                                 // Spells *http://ddragonexplorer.com/cdn/8.24.1/data/en_US/summoner.json*
@@ -355,7 +386,7 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
 
                             }).catch(error => {
                                 console.log(error);
-                                res.sendStatus(400);
+                                res.sendStatus(500);
                             })
 
                     }// End of matchlist for loop
@@ -373,12 +404,14 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
                     // Calculate Winrate after all match results calculated
                     summonerData.matchResults.winrate = `${
                         ((summonerData.matchResults.wins /
-                            (summonerData.matchResults.wins + summonerData.matchResults.losses)) * 100).toFixed(2)
+                            (summonerData.matchResults.wins + summonerData.matchResults.losses)) * 100).toFixed(1)
                         }%`
 
                     // Calculate kill/death ration after all matches' KDAs calculated
-                    summonerData.KDA.kdar = `${((summonerData.KDA.kills + summonerData.KDA.assists) / summonerData.KDA.deaths).toFixed(2)}:1`
-
+                    summonerData.KDA.kdar = `${((summonerData.KDA.kills + summonerData.KDA.assists) / summonerData.KDA.deaths).toFixed(2)}:1`;
+                    summonerData.KDA.kills = Number((summonerData.KDA.kills / (summonerData.matchResults.wins + summonerData.matchResults.losses)).toFixed(1));
+                    summonerData.KDA.deaths = Number((summonerData.KDA.deaths / (summonerData.matchResults.wins + summonerData.matchResults.losses)).toFixed(1));
+                    summonerData.KDA.assists = Number((summonerData.KDA.assists / (summonerData.matchResults.wins + summonerData.matchResults.losses)).toFixed(1));
                     /* 
                         Calculate 3 most played champions by games played, after all matches 
                         .sort mutates original object
@@ -402,14 +435,15 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
 
             }).catch(error => {
                 console.log(error);
-                res.sendStatus(400);
+                res.sendStatus(500);
             })
 
     }).catch(error => {
         // res.send({didSucceed: false, data: null})\
         console.log(error);
-        res.sendStatus(400);
+        res.sendStatus(500);
     })
 })
+
 
 module.exports = router;

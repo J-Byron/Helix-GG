@@ -168,7 +168,7 @@ class LoginDropDown extends Component {
 
 const mapStoreToProps = reduxStore => ({
     errors: reduxStore.errors,
-    user: reduxStore.user
+    user: reduxStore.user.user
 })
 
 export default connect(mapStoreToProps)(LoginDropDown);

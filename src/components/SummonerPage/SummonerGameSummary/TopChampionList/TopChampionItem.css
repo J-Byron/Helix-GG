@@ -1,0 +1,36 @@
+.champion-cell {
+    width: 90%;
+    height: 40px;
+    margin: 0px 5% 5px 5%;
+    display: flex;
+    justify-content: space-between;
+    text-align: center
+}
+
+.champion-cell-image{
+    width: 40px;
+    height: 40px;
+    background-size: 40px;
+    margin: 0px 0px 0px 0px;
+    float: left;
+}
+
+.champion-cell-name {
+    font-family: 'Krungthep';
+    font-size: 10px;
+    color: #eeeeee;
+    line-height: 40px;
+    margin-left: 5px;
+    float: left;
+    text-align: center;
+}
+
+.wr-box {
+    float: right;
+    /* margin-right: 20px; */
+}
+
+.kda-box {
+    float: right;
+    /* margin-right: 5px; */
+}
