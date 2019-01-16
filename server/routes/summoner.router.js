@@ -268,7 +268,7 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
                                     championStats.wins += (queriedMatchParticipant.stats.win) ? 1 : 0;
                                     championStats.loses += (queriedMatchParticipant.stats.win) ? 0 : 1;
                                     championStats.totalGamesPlayed++ ,
-                                        championStats.winrate = `${((championStats.wins / ((championStats.wins) + (championStats.loses))) * 100).toFixed(2)}%`;
+                                        championStats.winrate = `${((championStats.wins / ((championStats.wins) + (championStats.loses))) * 100).toFixed(1)}%`;
 
                                     championStats.kills += queriedMatchParticipant.stats.kills;
                                     championStats.averageKills = Number((championStats.kills / championStats.totalGamesPlayed).toFixed(2));
@@ -281,6 +281,9 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
 
                                     championStats.cs += (queriedMatchParticipant.stats.totalMinionsKilled + queriedMatchParticipant.stats.neutralMinionsKilled);
                                     championStats.averageCs = Number(((championStats.cs) / (championStats.totalGamesPlayed)).toFixed(2));
+
+                                    championStats.kdar = `${Number(((championStats.kills + championStats.assists)/championStats.deaths).toFixed(1))}:1`;
+
 
                                 } else {
                                     championHistory[champions[summonerChampionId]] = {
@@ -303,6 +306,11 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
                                         cs: (queriedMatchParticipant.stats.totalMinionsKilled + queriedMatchParticipant.stats.neutralMinionsKilled),
                                         averageCs: (queriedMatchParticipant.stats.totalMinionsKilled + queriedMatchParticipant.stats.neutralMinionsKilled),
                                     }
+                                    
+                                    const championStats = championHistory[champions[summonerChampionId]];
+
+                                    championStats.kdar = `${Number(((championStats.kills + championStats.assists)/ championStats.kills).toFixed(1))}:1`
+
                                 }
 
                                 // Spells *http://ddragonexplorer.com/cdn/8.24.1/data/en_US/summoner.json*
@@ -400,8 +408,10 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
                         }%`
 
                     // Calculate kill/death ration after all matches' KDAs calculated
-                    summonerData.KDA.kdar = `${((summonerData.KDA.kills + summonerData.KDA.assists) / summonerData.KDA.deaths).toFixed(2)}:1`
-
+                    summonerData.KDA.kdar = `${((summonerData.KDA.kills + summonerData.KDA.assists) / summonerData.KDA.deaths).toFixed(2)}:1`;
+                    summonerData.KDA.kills = Number((summonerData.KDA.kills / (summonerData.matchResults.wins + summonerData.matchResults.losses)).toFixed(1));
+                    summonerData.KDA.deaths = Number((summonerData.KDA.deaths / (summonerData.matchResults.wins + summonerData.matchResults.losses)).toFixed(1));
+                    summonerData.KDA.assists = Number((summonerData.KDA.assists / (summonerData.matchResults.wins + summonerData.matchResults.losses)).toFixed(1));
                     /* 
                         Calculate 3 most played champions by games played, after all matches 
                         .sort mutates original object
