@@ -1,0 +1,167 @@
+
+.recent-reviews {
+  margin: 5px 0px 0px 0px;
+  font-family: 'Krungthep';
+  color: #eeeeee;
+  font-size: 25px;
+  text-align: center;
+}
+.review-container{
+    width: 90%;
+    height: 240px;
+    max-height: 100%;
+    margin: 5px 5% 10% 5%;
+    overflow: auto;
+    padding: 0px;
+    box-shadow: 
+        inset 0px 11px 20px -10px rgba(0, 0, 0, 0.61),
+        inset 0px -11px 10px -10px rgba(0, 0, 0, 0.616);
+    border-radius: 4px;
+}
+
+.review-list{
+  padding-top: 3px;
+    margin: 0px;
+    width: 100%;
+}
+
+.itemfade-appear {
+    opacity: 0;
+    z-index: 1;
+}
+
+.itemfade-appear.itemfade-appear-active {
+    opacity: 1;
+    animation: 1000ms linear;
+}
+  
+  /*Animations*/
+  
+  /* @keyframes itemmovein {
+    0% {
+        opacity: .25;
+        transform: translateX(-50px);
+    }
+    20% { 
+        transform: translateX(-50px);
+        opacity: .5;
+    }
+    40% { 
+        transform: translateX(-50px);
+        opacity: .75;
+    }
+    100% {
+        transform: translateX(-50px);
+        opacity: 1;
+    }
+  }  */
+
+  /* @keyframes spring-keyframes {
+    0% {
+      transform: scale(0) translateY(50%);
+      opacity: 0; }
+    2.85714% {
+      transform: scale(0.09504) translateY(45.2482%);
+      opacity: 0.09504; }
+    5.71429% {
+      transform: scale(0.20569) translateY(39.71542%);
+      opacity: 0.20569; }
+    8.57143% {
+      transform: scale(0.32234) translateY(33.88325%);
+      opacity: 0.32234; }
+    11.42857% {
+      transform: scale(0.43778) translateY(28.11084%);
+      opacity: 0.43778; }
+    14.28571% {
+      transform: scale(0.54695) translateY(22.65273%);
+      opacity: 0.54695; }
+    17.14286% {
+      transform: scale(0.64647) translateY(17.67651%);
+      opacity: 0.64647; }
+    20% {
+      transform: scale(0.73441) translateY(13.2796%);
+      opacity: 0.73441; }
+    22.85714% {
+      transform: scale(0.80991) translateY(9.50458%);
+      opacity: 0.80991; }
+    25.71429% {
+      transform: scale(0.87295) translateY(6.35268%);
+      opacity: 0.87295; }
+    28.57143% {
+      transform: scale(0.92409) translateY(3.79551%);
+      opacity: 0.92409; }
+    31.42857% {
+      transform: scale(0.96431) translateY(1.78473%);
+      opacity: 0.96431; }
+    34.28571% {
+      transform: scale(0.9948) translateY(0.26002%);
+      opacity: 0.9948; }
+    37.14286% {
+      transform: scale(1.01689) translateY(-0.84471%);
+      opacity: 1.01689; }
+    40% {
+      transform: scale(1.03193) translateY(-1.59654%);
+      opacity: 1.03193; }
+    42.85714% {
+      transform: scale(1.0412) translateY(-2.06017%);
+      opacity: 1.0412; }
+    45.71429% {
+      transform: scale(1.04591) translateY(-2.29548%);
+      opacity: 1.04591; }
+    48.57143% {
+      transform: scale(1.04712) translateY(-2.35613%);
+      opacity: 1.04712; }
+    51.42857% {
+      transform: scale(1.04578) translateY(-2.28878%);
+      opacity: 1.04578; }
+    54.28571% {
+      transform: scale(1.04266) translateY(-2.13288%);
+      opacity: 1.04266; }
+    57.14286% {
+      transform: scale(1.03842) translateY(-1.92087%);
+      opacity: 1.03842; }
+    60% {
+      transform: scale(1.03357) translateY(-1.67862%);
+      opacity: 1.03357; }
+    62.85714% {
+      transform: scale(1.02852) translateY(-1.4261%);
+      opacity: 1.02852; }
+    65.71429% {
+      transform: scale(1.02356) translateY(-1.17809%);
+      opacity: 1.02356; }
+    68.57143% {
+      transform: scale(1.0189) translateY(-0.94498%);
+      opacity: 1.0189; }
+    71.42857% {
+      transform: scale(1.01467) translateY(-0.73351%);
+      opacity: 1.01467; }
+    74.28571% {
+      transform: scale(1.01095) translateY(-0.54749%);
+      opacity: 1.01095; }
+    77.14286% {
+      transform: scale(1.00777) translateY(-0.38845%);
+      opacity: 1.00777; }
+    80% {
+      transform: scale(1.00512) translateY(-0.25623%);
+      opacity: 1.00512; }
+    82.85714% {
+      transform: scale(1.00299) translateY(-0.14944%);
+      opacity: 1.00299; }
+    85.71429% {
+      transform: scale(1.00132) translateY(-0.06589%);
+      opacity: 1.00132; }
+    88.57143% {
+      transform: scale(1.00006) translateY(-0.00293%);
+      opacity: 1.00006; }
+    91.42857% {
+      transform: scale(0.99915) translateY(0.04232%);
+      opacity: 0.99915; }
+    94.28571% {
+      transform: scale(0.99854) translateY(0.07275%);
+      opacity: 0.99854; }
+    97.14286% {
+      transform: scale(0.99818) translateY(0.09114%);
+      opacity: 0.99818; }
+    100% {
+      transform: scale(1) translateY(0%);
+      opacity: 1; } } */

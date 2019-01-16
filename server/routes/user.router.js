@@ -6,6 +6,7 @@ const userStrategy = require('../strategies/user.strategy');
 
 const router = express.Router();
 
+// *----------* Auth *----------*
 // Handles Ajax request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req, res) => {
   // Send back user object from the session (previously queried from the database)
@@ -40,5 +41,73 @@ router.post('/logout', (req, res) => {
   req.logout();
   res.sendStatus(200);
 });
+
+// *----------* helix CRUD *----------*
+
+//
+router.post('/favorite', (req,res)=>{
+
+  const summonerName = req.body.summonerName;
+  const userId = req.body.userId;
+
+  const queryString = `INSERT INTO "Favorite" ("user_id","summoner_Name") VALUES ($1,$2);`;
+
+  pool.query(queryString, [userId,summonerName]).then(result=>{
+    res.sendStatus(204);
+  }).catch(err =>{
+    console.log(`Error in post ../user/favorites: ${err}`);
+    res.sendStatus(500);
+  })
+})
+
+//
+router.get('/:id/favorites', (req,res) =>{
+  const userId = req.params.id;
+  const queryString = `SELECT ("summoner_Name") FROM "Favorite" where "user_id" = $1;`;
+
+  pool.query(queryString, [userId]).then(result =>{
+    res.send(result.rows);
+  }).catch(err =>{
+    console.log(`Error in  get ../user/id/favorites: ${err}`);
+    res.sendStatus(500);
+  })
+})
+
+//
+router.post('/review',(req,res)=>{
+
+  // Destructure content of req.body
+  const {summonerName, id, rating, reviewContent} = req.body;
+
+  // Create SQL query string
+  const queryString = 'INSERT INTO "Review" ("reviewed_summonerName","reviewing_user_id","rating","content") VALUES ($1,$2,$3,$4);';
+
+  // Post data to database and handle error
+  pool.query(queryString,[summonerName, id, rating, reviewContent])
+  .then(()=>{
+    res.sendStatus(204)
+  }).catch(err=>{
+    console.log(`Error in post ../user/review: ${err}`);
+    res.sendStatus(500);
+  })
+
+})
+
+//
+router.get('/:id/reviews', (req,res) => {
+  //
+  const userId = req.params.id;
+
+  //
+  const queryString = `SELECT * FROM "Review" where "reviewing_user_id" = $1;`;
+
+  //
+  pool.query(queryString, [userId]).then(result =>{
+    res.send(result.rows);
+  }).catch(err =>{
+    console.log(`Error in  get ../user/id/reviews: ${err}`);
+    res.sendStatus(500);
+  })
+})
 
 module.exports = router;

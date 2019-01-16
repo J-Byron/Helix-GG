@@ -76,19 +76,19 @@
 
 
 /* Highlight effect on search From */
-input[type=text], .searchBar {
+.searchForm {
     -webkit-transition: all 0.30s ease-in-out;
     -moz-transition: all 0.30s ease-in-out;
     -ms-transition: all 0.30s ease-in-out;
     -o-transition: all 0.30s ease-in-out;
     outline: none;
-    border: 1px solid #ffffff;
+    border: 0px solid #ffffff;
   }
 
-  input[type=text]:focus + .searchBar {
+  /* input[type=text]:focus + .searchBar {
     box-shadow: 0 0 5px #0CA5B0;
     border: 1px solid #0CA5B0;
-  }
+  } */
   /* 0CA5B0  rgba(81, 203, 238, 1)*/
 
 
@@ -113,28 +113,81 @@ input[type=text], .searchBar {
     }
 }
 
+.helix-container {
+    position: relative;
+}
+
 @keyframes bouncing-loader {
     to {
-      opacity: 0.1;
+      opacity: .1;
       transform: translate3d(0, -1rem, 0);
     }
   }
   .bouncing-loader {
+    z-index: 1;
     margin-top: 30px;
     display: flex;
     justify-content: center;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
   }
   .bouncing-loader > div {
+    z-index: 1;
     width: 1rem;
     height: 1rem;
     margin: 3rem 0.2rem;
     background: #0CA5B0;
     border-radius: 50%;
-    animation: bouncing-loader 0.6s infinite alternate;
+    animation: bouncing-loader .8s infinite alternate;
   }
   .bouncing-loader > div:nth-child(2) {
-    animation-delay: 0.2s;
+    z-index: 1;
+    animation-delay: 0.3s;
   }
   .bouncing-loader > div:nth-child(3) {
+    z-index: 1;
+    animation-delay: 0.6s;
+  }
+
+  @keyframes bouncing-loader-white {
+    from {
+        opacity: 1;
+        transform: translate3d(0, -.9rem, 0);
+    }
+    to {
+      opacity: 0;
+      /* transform: translate3d(0, -1rem, 0); */
+    }
+  }
+  .bouncing-loader-white {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    z-index: 2;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+  }
+
+  .bouncing-loader-white > div {
+    z-index: 2;
+    width: 1rem;
+    height: 1rem;
+    margin: 3rem 0.2rem;
+    background: #eeeeee;
+    border-radius: 50%;
+    animation: bouncing-loader-white .7s infinite alternate-reverse;
+  }
+  .bouncing-loader-white > div:nth-child(2) {
+    z-index: 2;
+    animation-delay: 0.2s;
+  }
+  .bouncing-loader-white > div:nth-child(3) {
+    z-index: 2;
     animation-delay: 0.4s;
   }

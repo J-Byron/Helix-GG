@@ -1,0 +1,67 @@
+.game-summary-container{
+    width: 25%; 
+    height: 200px;
+    float: left;
+    margin: 20px 0px 0px 20%;
+    background-color: #282f3a;
+    box-shadow: 0px -3px #016166;
+    font-family: 'Krungthep';
+}
+
+.wr-kda-container{
+    width: 100%;
+    height: 100px;
+    display: flex;
+}
+
+.wr-container {
+    width: 100%;
+    display: flex;
+}
+
+.kda-box-container {
+    background-color: #222a32;
+    width: 100%;
+    display: flex;
+}
+.wr-box, .kda-box {
+    color: #eeeeee;
+    font-size: .7vw;
+    text-align: center;
+    vertical-align: middle;
+    /* line-height: 25px; */
+    margin: auto 0px auto 20px;
+}
+.kda-box{
+    margin: auto 0px auto 10px;
+}
+.wr-header{
+    font-size: 19px;
+}
+
+.wr-blue{
+    color: #0CA5B0;
+}
+
+.wr-red{
+    color: #FE4365;
+}
+
+.wr-piegraph {
+    height: 100%;
+    width: 75px;
+    margin-left: 10px;
+}
+
+.kda-piegraph {
+    height: 100%;
+    width: 75px;
+    margin-left: 10px;
+}
+
+.top-champion-container{
+    width: 100%;
+    height: 150px;
+    background-color: #212830;
+    box-shadow: 0 8px 6px -7px black;
+}
