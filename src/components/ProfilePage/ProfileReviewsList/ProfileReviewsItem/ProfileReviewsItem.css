@@ -1,10 +1,188 @@
 
 
-.reviewCell-master, .reviewCell-detail {
+.reviewCell {
     width: 100%;
-    height: 60px;
     background-color: rgb(12, 160, 170);
     margin: 2px 0px;
     border-radius: 2px;
+    box-shadow: 0px 2px #006368;
     display: flex;
+    flex-wrap: wrap;
+    transition: height .2s;
+    font-family: 'Krungthep';
+}
+
+.cell-open{
+    height: 120px;
+}
+
+.cell-closed{
+    height: 60px;
+}
+
+.cell-header{
+    display: inline;
+    width: 95%;
+    height: 10px;
+    margin: 3px 2.5% 3px 2.5%;
+    font-size: 10px;
+}
+
+.cell-summoner{
+    font-size: 10px;
+    display: inline;
+    color: #eeeeee;
+}
+
+.cell-close-detail{
+    display: inline;
+    /* color: #20282f; */
+    float: right;
+    user-select: none;
+    cursor: pointer;
+}
+
+.cell-detail-edit {
+    transition: font-size .2s;
+}
+
+.cell-detail-edit:hover {
+    font-size: 14px;
+}
+
+.cell-detail-close{
+    transition: font-size .1s;
+    color: #171d21;
+    font-size: 15px;
+}
+
+.cell-detail-close:hover {
+    font-size: 18px;
+}
+
+.cell-content{
+    border-radius: 2px;
+    padding: 2px 4px;
+    background-color: rgb(12, 160, 170);
+    border: 0px solid transparent;
+
+    /* height: 10px; */
+    /* min-height: 10px; */
+
+    min-width: 50%;
+    /* max-width: auto; */
+    /* margin: 2px 5%; */ 
+
+    height: 0px;
+    resize:vertical;
+    color: #171d21;
+    font-size:12px;
+    line-height:1.5;
+    font-weight:300px;
+    font-family: 'Krungthep';
+    margin: 5px 15px;
+    float: top;
+
+    transition: height .15s;
+    resize: none;
+}
+
+.cell-content-closed{
+    height: 18px;
+    width: 250px;
+    max-height: 18px;
+    box-shadow: none;
+}
+
+.cell-content-open{
+    height: 86px;
+    width: 50%;
+    max-height:86px;
+    box-shadow: inset 0px 0px 2px .3px black;
+}
+
+.cell-content-closed:focus, .cell-content-open:focus{
+    outline: none !important;
+    border: none;
+
+    /* 
+        max-height: 50px;
+        max-width: 100%;
+    */
+}
+
+.review-cell-rating1,.review-cell-rating2, .review-cell-rating3 , .review-cell-rating4 , .review-cell-rating5{
+    font-family: 'Krungthep';
+    font-size: 25px;
+    margin-right: 40px;
+    color: #eeeeee;
+}
+
+.cell-ratings {
+    margin: 5px 0px;
+    text-align: center;
+    font-size: 20px;
+    letter-spacing: 10px;
+}
+
+.cell-edit-right{
+    width: 50%;
+    margin: 5px 15px;
+}
+
+.cell-rating-Selected{
+    color: #eeeeee;
+    font-size: 27px;
+    cursor: pointer;
+}
+
+.cell-rating{
+    cursor: pointer;
+}
+
+.cell-button-container{
+
+    height: 30px;
+    margin: 10px 0px 0px 0px;
+    display: flex;
+    justify-content: center;
+    font-size: 10px;
+}
+
+.cell-save-button{
+    background-color: #171d21;
+    width: 35%;
+    height: 30px;
+    margin-right: 18px;
+    margin-bottom: 2px;
+    cursor: pointer;
+
+    border-radius: 3px;
+    box-shadow: 0 0px 18px 1px rgba(0, 0, 0, 0.486);
+
+    text-align: center;
+    color: #12a0aa;
+    vertical-align: middle;
+    line-height: 30px;
+
+}
+
+.cell-save-button:active, .cell-delete-button:active{
+    transform: translateY(2px);
+}
+
+.cell-delete-button{
+    background-color: #171d21;
+    width: 35%;
+    height: 30px;
+    margin-left: 18px;
+    cursor: pointer;
+
+    border-radius: 3px;
+    box-shadow: 0 0px 18px 1px rgba(0, 0, 0, 0.486);
+
+    text-align: center;
+    color: #d12828;
+    vertical-align: middle;
+    line-height: 30px;
 }

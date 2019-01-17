@@ -11,7 +11,7 @@
 }
 
 .profile-list-container{
-    width: 35%;
+    width: 30%;
     min-height: 200px;
     box-shadow: 0px -3px #016166, 0 8px 16px -8px black;
     background-color: #171d22;
@@ -25,10 +25,10 @@
 }
 
 .profile-reviews{
-    margin: 60px 1% 0px 14%;
+    margin: 60px .5% 0px 19.5%;
 }
 
 .profile-favorites{
     height: 200px;
-    margin: 60px 14% 0px 1%;
+    margin: 60px 19.5% 0px .5%;
 }

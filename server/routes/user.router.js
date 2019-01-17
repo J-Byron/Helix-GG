@@ -61,7 +61,7 @@ router.post('/favorite', (req,res)=>{
 //
 router.get('/:id/favorites', (req,res) =>{
   const userId = req.params.id;
-  const queryString = `SELECT ("summoner_Name") FROM "Favorite" where "user_id" = $1;`;
+  const queryString = `SELECT "summoner_Name","summoner_profile_icon" FROM "Favorite" where "user_id" = $1 ORDER BY "id" DESC;`;
 
   pool.query(queryString, [userId]).then(result =>{
     res.send(result.rows);
@@ -97,7 +97,7 @@ router.get('/:id/reviews', (req,res) => {
   const userId = req.params.id;
 
   //
-  const queryString = `SELECT * FROM "Review" where "reviewing_user_id" = $1;`;
+  const queryString = `SELECT * FROM "Review" where "reviewing_user_id" = $1 ORDER BY "id" DESC;`;
 
   //
   pool.query(queryString, [userId]).then(result =>{
