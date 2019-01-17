@@ -2,7 +2,7 @@
 import React from 'react';
 import {Route} from 'react-router-dom'
 import {connect} from 'react-redux';
-import LoginPage from '../LoginPage/LoginPage';
+import HomePage from '../HomePage/HomePage';
 
 // A Custom Wrapper Component -- This will keep our code DRY.
 // Responsible for watching redux state, and returning an appropriate component
@@ -34,7 +34,7 @@ const ProtectedRoute = (props) => {
   } else if (loginMode === 'login') {
     // if they are not logged in, check the loginMode on Redux State
     // if the mode is 'login', show the LoginPage
-    // ComponentToShow = LoginPage;
+    ComponentToShow = HomePage;
   } 
 
   // else {
