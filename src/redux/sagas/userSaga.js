@@ -84,11 +84,10 @@ function* postFavoriteSummoner(action){
     console.log(action.payload);
     
     // Data from action
-    const userId = action.payload.userId;
-    const summonerName = action.payload.summonerName;
+    const {userId, summonerName, profileIcon} = action.payload;
 
     // post data to ../../favorite endpoint
-    yield axios.post('/api/user/favorite', {userId, summonerName})
+    yield axios.post('/api/user/favorite', {userId, summonerName, profileIcon})
 
     // notify user of update (?)
 
@@ -110,9 +109,9 @@ function* fetchFavorites(action){
     //
     const favoritesResponse = yield axios.get(`/api/user/${userId}/favorites`);
 
-    const favorites = favoritesResponse.data.map(player=>{
-      return player.summoner_Name;
-    }) 
+    const favorites = favoritesResponse.data;
+
+    console.log(favorites);
 
     //
     yield dispatch({type:'SET_FAVORITES',payload: favorites});
