@@ -46,13 +46,11 @@ router.post('/logout', (req, res) => {
 
 //
 router.post('/favorite', (req,res)=>{
+  const {summonerName, userId, profileIcon} = req.body;
 
-  const summonerName = req.body.summonerName;
-  const userId = req.body.userId;
+  const queryString = `INSERT INTO "Favorite" ("user_id","summoner_Name","summoner_profile_icon") VALUES ($1,$2,$3);`;
 
-  const queryString = `INSERT INTO "Favorite" ("user_id","summoner_Name") VALUES ($1,$2);`;
-
-  pool.query(queryString, [userId,summonerName]).then(result=>{
+  pool.query(queryString, [userId,summonerName, profileIcon]).then(result=>{
     res.sendStatus(204);
   }).catch(err =>{
     console.log(`Error in post ../user/favorites: ${err}`);

@@ -1,0 +1,10 @@
+
+
+.reviewCell-master, .reviewCell-detail {
+    width: 100%;
+    height: 60px;
+    background-color: rgb(12, 160, 170);
+    margin: 2px 0px;
+    border-radius: 2px;
+    display: flex;
+}

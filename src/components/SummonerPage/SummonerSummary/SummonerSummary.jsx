@@ -25,7 +25,8 @@ class SummonerSummary extends Component {
             type: 'POST_FAVORITE_SUMMONER',
             payload: {
                 userId: this.props.user.user.id,
-                summonerName: this.props.summoner.summoner.summonerName
+                summonerName: this.props.summoner.summoner.summonerName,
+                profileIcon: this.props.summoner.summoner.profileIcon,
             }
         })
     }
@@ -54,7 +55,10 @@ class SummonerSummary extends Component {
 
     canFavorite = () => {
         // If user already favorited the displayed summoner, do not give ability to favorite
-        const favorites = this.props.user.favorites;
+        const favorites = this.props.user.favorites.map(player=>{
+            return player.summoner_Name;
+          });
+          
         if ((favorites.indexOf(this.props.summoner.summoner.summonerName) > -1) && this.props.user.user.id) {
             return false
         } else if (!this.props.user.user.id) {
