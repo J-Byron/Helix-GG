@@ -108,6 +108,26 @@ router.get('/:id/reviews', (req,res) => {
   })
 })
 
+//
+router.put('/review', (req,res)=>{
+
+  // Deconstruct
+  const {reviewContent, reviewId, reviewRating} = req.body;
+
+  //
+  const queryString = `UPDATE "Review" 
+                       SET "rating" = $1, "content" = $2
+                       WHERE "id" = $3;`;
+
+  pool.query(queryString,[reviewRating, reviewContent, reviewId])
+  .then(result=>{
+    res.sendStatus(204);
+  })
+  .catch(err=>{
+    console.log(`Error in PUT api/user/review: ${err}`);
+  })
+});
+
 // yield axios.delete(`/api/user/delete/${reviewId}`);
 router.delete('/delete/:reviewId', (req,res)=>{
   const reviewId = req.params.reviewId;
