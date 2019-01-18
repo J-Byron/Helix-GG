@@ -307,9 +307,9 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
                                         averageCs: (queriedMatchParticipant.stats.totalMinionsKilled + queriedMatchParticipant.stats.neutralMinionsKilled),
                                     }
                                     
-                                    const championStats = championHistory[champions[summonerChampionId]];
+                                    const champStats = championHistory[champions[summonerChampionId]];
 
-                                    championStats.kdar = `${Number(((championStats.kills + championStats.assists)/ championStats.kills).toFixed(1))}:1`
+                                    champStats.kdar = `${Number(((champStats.kills + champStats.assists)/ champStats.deaths).toFixed(1))}:1`
 
                                 }
 

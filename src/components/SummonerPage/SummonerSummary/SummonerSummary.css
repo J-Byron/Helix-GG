@@ -42,22 +42,6 @@ p {
 
 }
 
-.review-player {
-    margin-top: 40px;
-    font-family: 'Krungthep';
-    color: #00adb5;
-    font-size: 12px;
-}
-
-.review-player:hover {
-    text-shadow: 0px 0px 5px #00adb5;
-    cursor: pointer;
-}
-
-.review-player:active {
-    transform: translateY(1px);
-}
-
 .column3 {
     width: 50%;
     height: 300px;

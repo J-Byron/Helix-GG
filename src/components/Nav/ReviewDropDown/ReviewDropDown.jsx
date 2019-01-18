@@ -36,6 +36,8 @@ class ReviewDropDown extends Component {
             }
         })
 
+        this.props.toggleForm();
+
     }
 
     handleRatingClick = (rating) => {
@@ -66,7 +68,7 @@ class ReviewDropDown extends Component {
             <CSSTransition
                 in={this.props.showReviewForm}
                 appear={true}
-                timeout={500}
+                timeout={1000}
                 classNames="review"
                 mountOnEnter
                 unmountOnExit
@@ -104,10 +106,10 @@ class ReviewDropDown extends Component {
                             placeholder='ex. Good Map Awareness' 
                             onChange={this.handleInputChange}/>
                         {/* Submit */}
-                    </div >
-                    <div className='review-submit-button' onClick={this.handleSubmitDidClick}>
+                        <div className='review-submit-button' onClick={this.handleSubmitDidClick}>
                         Submit
-                </div>
+                    </div>
+                    </div >
                 </div>
             </CSSTransition>
         );
