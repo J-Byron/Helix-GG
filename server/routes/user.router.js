@@ -108,4 +108,17 @@ router.get('/:id/reviews', (req,res) => {
   })
 })
 
+// yield axios.delete(`/api/user/delete/${reviewId}`);
+router.delete('/delete/:reviewId', (req,res)=>{
+  const reviewId = req.params.reviewId;
+  const queryString = 'DELETE FROM "Review" WHERE id=$1;';
+
+  pool.query(queryString,[reviewId]).then(result=>{
+    res.sendStatus(204);
+  }).catch(error=>{
+    console.log(`Erro in user/delete/:reviewId: `, error);
+    res.sendStatus(500);
+  })
+})
+
 module.exports = router;

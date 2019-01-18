@@ -52,7 +52,10 @@ class ProfileReviewsItem extends Component {
 
     handleDeleteClick = () =>{
         console.log('Deleting', this.state.itemId);
-        
+        this.props.dispatch({
+            type: 'DELETE_USER_REVIEW',
+            payload: {userId: this.props.userId, reviewId: this.state.itemId}
+        })
     }
 
     // Set CSS rule for an element depending on whether or not it is selected
@@ -172,4 +175,9 @@ class ProfileReviewsItem extends Component {
     }
 }
 
-export default connect()(ProfileReviewsItem);
+const mapStoreToProps = store => ({
+    // Children need user's reviews & favorites
+    userId: store.user.user.id
+})
+
+export default connect(mapStoreToProps)(ProfileReviewsItem);

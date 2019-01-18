@@ -13,6 +13,13 @@ import './ProfilePage.css'
 
 
 class ProfilePage extends Component {
+
+    componentDidMount(){
+        // this.props.dispatch({
+        //     type: 'FETCH_USER'
+        // })
+    }
+
     render() {
         console.log(this.props.reviews);
         console.log(this.props.favorites);
