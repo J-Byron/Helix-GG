@@ -24,7 +24,6 @@ class ProfileReviewsItem extends Component {
         detailIsVisible: false,
         itemReview: '',
         itemRating: '',
-        itemSummoner: '',
         itemId:'',
     }
 
@@ -39,7 +38,6 @@ class ProfileReviewsItem extends Component {
         this.setState({
             itemReview: this.props.review.content,
             itemRating: this.props.review.rating,
-            itemSummoner: this.props.review.reviewed_summonerName,
             itemId: this.props.review.id
         })
     }
@@ -47,6 +45,21 @@ class ProfileReviewsItem extends Component {
     handleSaveClick = () => {
         // dispatch update
         console.log('Shipping ', this.state);
+
+        this.props.dispatch({
+            type: 'UPDATE_USER_REVIEW',
+            payload: {
+                reviewId: this.state.itemId,
+                reviewRating: this.state.itemRating,
+                reviewContent: this.state.itemReview,
+                userId: this.props.userId
+            }
+        })
+
+        // close edit window
+        this.setState({
+            detailIsVisible: false
+        })
         
     }
 
@@ -87,7 +100,7 @@ class ProfileReviewsItem extends Component {
                 <div className='cell-header'>
                     {/* Summoner who user reviewed */}
                     <div className='cell-summoner'>
-                        {this.state.itemSummoner}
+                        {this.props.review.reviewed_summonerName}
                     </div>
 
                     {/* Close detail */}
@@ -120,6 +133,7 @@ class ProfileReviewsItem extends Component {
                         maxLength={25}
                         value={this.state.itemReview}
                         onChange={this.handleContentChange}
+                        spellCheck="false"
                     />
 
                     {/* Rating */}

@@ -32,10 +32,6 @@ function* fetchUser() {
   }
 }
 
-function* fetchUserProfile(){
-  
-}
-
 // Post a review under user
 function* postReview(action){
   try {
@@ -59,6 +55,23 @@ function* postReview(action){
 
   } catch (error) {
     console.log(`Error in postReview`, error);
+  }
+}
+
+function* updateUserReview(action){
+  try {
+    
+    //
+    const {reviewContent, reviewId, reviewRating, userId} = action.payload;
+
+    // Put request
+    yield axios.put(`/api/user/review/`, {reviewContent, reviewId, reviewRating});
+
+    // Update reducer
+    yield dispatch({ type: 'FETCH_USER_REVIEWS', payload:userId});
+
+  } catch (error) {
+    console.log(`error in updateUserReview: `, error);
   }
 }
 
@@ -143,14 +156,16 @@ function* fetchFavorites(action){
 
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
-  yield takeLatest('FETCH_USER_PROFILE', fetchUserProfile);
 
   yield takeLatest('POST_REVIEW', postReview);
-  yield takeLatest('DELETE_USER_REVIEW', deleteUserReview)
+  yield takeLatest('DELETE_USER_REVIEW', deleteUserReview);
+  yield takeLatest('UPDATE_USER_REVIEW', updateUserReview);
   yield takeLatest('FETCH_USER_REVIEWS', fetchUserReviews);
 
   yield takeLatest('POST_FAVORITE_SUMMONER', postFavoriteSummoner);
   yield takeLatest('FETCH_FAVORITES', fetchFavorites);
+
+
 }
 
 export default userSaga;

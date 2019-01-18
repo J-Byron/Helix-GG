@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 // *----------* Components *----------*
 import ProfileReviewsList from './ProfileReviewsList/ProfileReviewsList'
+import ProfileFavoritesList from './ProfileFavoritesList/ProfileFavoritesList';
 
 // *----------* Styling *----------*
 import './ProfilePage.css'
@@ -41,7 +42,7 @@ class ProfilePage extends Component {
                         <div className='profile-reviews-header'>
                             Favorites
                         </div>
-                        {/* <ProfileFavoritesComponent/> */}
+                        <ProfileFavoritesList favorites={this.props.favorites}/>
                         
 
                     </div>
