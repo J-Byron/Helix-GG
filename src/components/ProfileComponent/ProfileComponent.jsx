@@ -35,6 +35,9 @@ class ProfileComponent extends Component {
 
     handleProfileClick = () => {
         this.props.history.push('/profile');
+        this.setState({
+            showMenu:false
+        })
     }
 
     handleThemeClick = () => {

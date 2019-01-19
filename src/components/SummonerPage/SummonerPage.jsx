@@ -30,8 +30,9 @@ class SummonerPage extends Component{
 
     }
 
-    componentDidMount(){
-        // Set queue data
+    componentWillUnmount(){
+        // Reset data on summoner page unmount so review isnt visible
+        this.props.dispatch({type: 'RESET_DATA'})
     }
 
     render(){
@@ -54,4 +55,4 @@ class SummonerPage extends Component{
     }
 }
 
-export default SummonerPage;
+export default connect()(SummonerPage);

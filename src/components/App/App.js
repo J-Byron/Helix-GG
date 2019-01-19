@@ -18,6 +18,7 @@ import Nav from '../Nav/Nav';
 import HomePage from '../HomePage/HomePage'
 import Footer from '../Footer/Footer';
 import SummonerPage from '../SummonerPage/SummonerPage';
+import ProfilePage from '../ProfilePage/ProfilePage';
 
 // Consider Deleting
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
@@ -53,7 +54,7 @@ class App extends Component {
           }/>
 
             {/* Visiting /search will result in an error page, otherwise it will render the profile page of the user */}
-            <ProtectedRoute path='/profile' component={() => { }} />
+            <ProtectedRoute path='/profile' component={ ProfilePage }/>
 
           </Switch>
           <Footer />

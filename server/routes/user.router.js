@@ -46,13 +46,11 @@ router.post('/logout', (req, res) => {
 
 //
 router.post('/favorite', (req,res)=>{
+  const {summonerName, userId, profileIcon} = req.body;
 
-  const summonerName = req.body.summonerName;
-  const userId = req.body.userId;
+  const queryString = `INSERT INTO "Favorite" ("user_id","summoner_Name","summoner_profile_icon") VALUES ($1,$2,$3);`;
 
-  const queryString = `INSERT INTO "Favorite" ("user_id","summoner_Name") VALUES ($1,$2);`;
-
-  pool.query(queryString, [userId,summonerName]).then(result=>{
+  pool.query(queryString, [userId,summonerName, profileIcon]).then(result=>{
     res.sendStatus(204);
   }).catch(err =>{
     console.log(`Error in post ../user/favorites: ${err}`);
@@ -63,13 +61,27 @@ router.post('/favorite', (req,res)=>{
 //
 router.get('/:id/favorites', (req,res) =>{
   const userId = req.params.id;
-  const queryString = `SELECT ("summoner_Name") FROM "Favorite" where "user_id" = $1;`;
+  const queryString = `SELECT "id","user_id","summoner_Name","summoner_profile_icon" FROM "Favorite" where "user_id" = $1 ORDER BY "id" DESC;`;
 
   pool.query(queryString, [userId]).then(result =>{
     res.send(result.rows);
   }).catch(err =>{
     console.log(`Error in  get ../user/id/favorites: ${err}`);
     res.sendStatus(500);
+  })
+})
+
+router.delete('/favorite/delete/:id',(req,res)=>{
+  //
+  const {id} = req.params;
+  
+  //
+  const queryString = 'DELETE FROM "Favorite" WHERE id=$1;';
+
+  pool.query(queryString,[id])
+  .then(result => res.sendStatus(204))
+  .catch(error=>{
+    console.log(`Error in /api/user/favorite/delete/:id: ${error}`);
   })
 })
 
@@ -99,13 +111,46 @@ router.get('/:id/reviews', (req,res) => {
   const userId = req.params.id;
 
   //
-  const queryString = `SELECT * FROM "Review" where "reviewing_user_id" = $1;`;
+  const queryString = `SELECT * FROM "Review" where "reviewing_user_id" = $1 ORDER BY "id" DESC;`;
 
   //
   pool.query(queryString, [userId]).then(result =>{
     res.send(result.rows);
   }).catch(err =>{
     console.log(`Error in  get ../user/id/reviews: ${err}`);
+    res.sendStatus(500);
+  })
+})
+
+//
+router.put('/review', (req,res)=>{
+
+  // Deconstruct
+  const {reviewContent, reviewId, reviewRating} = req.body;
+
+  //
+  const queryString = `UPDATE "Review" 
+                       SET "rating" = $1, "content" = $2
+                       WHERE "id" = $3;`;
+
+  pool.query(queryString,[reviewRating, reviewContent, reviewId])
+  .then(result=>{
+    res.sendStatus(204);
+  })
+  .catch(err=>{
+    console.log(`Error in PUT api/user/review: ${err}`);
+  })
+});
+
+// yield axios.delete(`/api/user/delete/${reviewId}`);
+router.delete('/delete/:reviewId', (req,res)=>{
+  const reviewId = req.params.reviewId;
+  const queryString = 'DELETE FROM "Review" WHERE id=$1;';
+
+  pool.query(queryString,[reviewId]).then(result=>{
+    res.sendStatus(204);
+  }).catch(error=>{
+    console.log(`Erro in user/delete/:reviewId: `, error);
     res.sendStatus(500);
   })
 })

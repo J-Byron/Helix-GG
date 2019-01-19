@@ -32,7 +32,7 @@ function* fetchSummoner(action) {
             payload:{
                 summonerName: summonerName,
                 region: region,
-                queueType: 'Ranked', // Default
+                queueType: 'Normal', // Default
                 // history: action.payload.history
                 },
             history: action.history
