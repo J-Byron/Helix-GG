@@ -73,7 +73,7 @@ class ProfileReviewsItem extends Component {
 
     // Set CSS rule for an element depending on whether or not it is selected
     ratingRuleFor = (rating) => {
-        return (this.state.itemRating == rating)? 'cell-rating-Selected' : 'cell-rating'
+        return (this.state.itemRating == rating)? 'cell-rating cell-rating-Selected' : 'cell-rating'
     }
 
     handleRatingClick = (rating) => (event) => {

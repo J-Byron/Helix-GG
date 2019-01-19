@@ -68,7 +68,7 @@
   /* visibility: hidden; */
   opacity: 0;
   /* transition: opacity 500ms linear; */
-  animation: moveout 300ms ease forwards; 
+  animation: moveout 200ms ease forwards; 
   will-change: transform;
 }
 

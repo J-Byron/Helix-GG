@@ -4,7 +4,7 @@
     margin: 0px 5% 5px 5%;
     display: flex;
     justify-content: space-between;
-    text-align: center
+    text-align: center;
 }
 
 .champion-cell-image{
@@ -26,11 +26,11 @@
 }
 
 .wr-box {
-    float: right;
+    /* float: right; */
     /* margin-right: 20px; */
 }
 
 .kda-box {
-    float: right;
+    /* float: right; */
     /* margin-right: 5px; */
 }
