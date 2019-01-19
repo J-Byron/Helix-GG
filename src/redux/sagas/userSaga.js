@@ -154,6 +154,23 @@ function* fetchFavorites(action){
   }
 }
 
+//
+function* deleteFavorite(action){
+  try {
+    //decon. action
+    const {id, userId} = action.payload;
+
+    // Request delete
+    yield axios.delete(`/api/user/favorite/delete/${id}`);
+
+    // update favorites
+    yield dispatch({type:'FETCH_FAVORITES',payload: userId})
+
+  } catch (error) {
+    console.log(`Error in deleteFavorite:`, error);
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
 
@@ -164,8 +181,7 @@ function* userSaga() {
 
   yield takeLatest('POST_FAVORITE_SUMMONER', postFavoriteSummoner);
   yield takeLatest('FETCH_FAVORITES', fetchFavorites);
-
-
+  yield takeLatest('DELETE_FAVORITE', deleteFavorite);
 }
 
 export default userSaga;
