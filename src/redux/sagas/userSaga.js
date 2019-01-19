@@ -58,6 +58,39 @@ function* postReview(action){
   }
 }
 
+function* updateUserReview(action){
+  try {
+    
+    //
+    const {reviewContent, reviewId, reviewRating, userId} = action.payload;
+
+    // Put request
+    yield axios.put(`/api/user/review/`, {reviewContent, reviewId, reviewRating});
+
+    // Update reducer
+    yield dispatch({ type: 'FETCH_USER_REVIEWS', payload:userId});
+
+  } catch (error) {
+    console.log(`error in updateUserReview: `, error);
+  }
+}
+
+function* deleteUserReview(action){
+  try {
+
+    const {userId, reviewId} = action.payload;
+
+    // Dispatch request to delete review from DB
+    yield axios.delete(`/api/user/delete/${reviewId}`);
+
+    // Update redux
+    yield dispatch({ type: 'FETCH_USER_REVIEWS', payload:userId})
+
+  } catch (error) {
+    console.log('Error in deleteUserReview: ', error);
+  }
+}
+
 // Fetch user's reviews
 function* fetchUserReviews(action){
   try {
@@ -84,11 +117,10 @@ function* postFavoriteSummoner(action){
     console.log(action.payload);
     
     // Data from action
-    const userId = action.payload.userId;
-    const summonerName = action.payload.summonerName;
+    const {userId, summonerName, profileIcon} = action.payload;
 
     // post data to ../../favorite endpoint
-    yield axios.post('/api/user/favorite', {userId, summonerName})
+    yield axios.post('/api/user/favorite', {userId, summonerName, profileIcon})
 
     // notify user of update (?)
 
@@ -110,9 +142,9 @@ function* fetchFavorites(action){
     //
     const favoritesResponse = yield axios.get(`/api/user/${userId}/favorites`);
 
-    const favorites = favoritesResponse.data.map(player=>{
-      return player.summoner_Name;
-    }) 
+    const favorites = favoritesResponse.data;
+
+    console.log(favorites);
 
     //
     yield dispatch({type:'SET_FAVORITES',payload: favorites});
@@ -122,12 +154,34 @@ function* fetchFavorites(action){
   }
 }
 
+//
+function* deleteFavorite(action){
+  try {
+    //decon. action
+    const {id, userId} = action.payload;
+
+    // Request delete
+    yield axios.delete(`/api/user/favorite/delete/${id}`);
+
+    // update favorites
+    yield dispatch({type:'FETCH_FAVORITES',payload: userId})
+
+  } catch (error) {
+    console.log(`Error in deleteFavorite:`, error);
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
+
   yield takeLatest('POST_REVIEW', postReview);
+  yield takeLatest('DELETE_USER_REVIEW', deleteUserReview);
+  yield takeLatest('UPDATE_USER_REVIEW', updateUserReview);
   yield takeLatest('FETCH_USER_REVIEWS', fetchUserReviews);
+
   yield takeLatest('POST_FAVORITE_SUMMONER', postFavoriteSummoner);
   yield takeLatest('FETCH_FAVORITES', fetchFavorites);
+  yield takeLatest('DELETE_FAVORITE', deleteFavorite);
 }
 
 export default userSaga;

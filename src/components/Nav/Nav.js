@@ -12,11 +12,12 @@ import LoginButton from '../LoginButton/LoginButton';
 import LoginDropDown from '../LoginDropDown/LoginDropDown';
 import ProfileComponent from '../ProfileComponent/ProfileComponent';
 
-// import LogOutButton from '../LogOutButton/LogOutButton';
+// *----------* Components *----------*
+import ReviewDropDown from './ReviewDropDown/ReviewDropDown';
 
 // *----------* Styling *----------*
 import './Nav.css';
-import { CSSTransition} from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group';
 
 //  {/* Show this link if they are logged in or not,
 //         but call this link 'Home' if they are logged in,
@@ -28,12 +29,13 @@ import { CSSTransition} from 'react-transition-group';
 // Can be refractored into login button!
 class Nav extends Component {
   state = {
+    showReviewForm: false,
     appearLogin: false,
     appearRegister: false
   }
 
   toggleLoginDropDown = () => {
-    console.log(`DROPDOWN!`);
+    // console.log(`DROPDOWN!`);
     this.setState({
       appearLogin: !this.state.appearLogin,
     })
@@ -58,23 +60,57 @@ class Nav extends Component {
     })
   }
 
+  handleReviewPlayerClick = () => {
+    // Send request to saga -> post review -> fetch reviews
+    this.setState({
+      showReviewForm: !this.state.showReviewForm
+    })
+  }
+
+  canLeaveReview = () => {
+    // Check if this user has reviewed the current summoner being displayed
+    const didReview = (this.props.user.reviews.map(review => review.reviewed_summonerName)
+      .indexOf(this.props.summoner.summonerName) > -1);
+
+    // console.log(`DID REVIEW = ${didReview}`);
+    // console.log(this.props.summoner.summonerName, this.props.user.user.summoner_Name);
+    // console.log(this.props.user.user.id,!didReview,this.props.summoner.summonerName != this.props.user.user.summoner_Name,this.props.summonerDataDidLoad);
+
+
+    if (this.props.user.user.id && !didReview && (this.props.summoner.summonerName != this.props.user.user.summoner_Name) && this.props.summonerDataDidLoad) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   render() {
     return (
       <div>
         <div className="nav">
           {/* If user is loged in show profile Component */}
-          <div 
-            className="logo" 
-            onClick={()=>{
+          <div
+            className="logo"
+            onClick={() => {
               this.props.history.push('/');
             }}
-            style={{cursor:'pointer'}}
+            style={{ cursor: 'pointer' }}
           />
 
-          {this.props.user.id ?
-
+          {this.props.user.user.id ?
+            // {this.props.summonerDataDidLoad ? () : ()}
             /* If true */
-            (<ProfileComponent />) :
+            (
+              <div style={{display: 'flex'}}>
+                {
+                  this.canLeaveReview() &&
+                  <div className='review-player' onClick={this.handleReviewPlayerClick}>
+                      review player
+                  </div>
+                }
+                <ProfileComponent />
+              </div>
+            ) :
 
             /* If false */
             (<div>
@@ -86,9 +122,6 @@ class Nav extends Component {
                 classNames="fade"
                 mountOnEnter
                 unmountOnExit
-              // onExiting={()=>console.log(` Login Exiting!`)}
-              // onEntering={()=>console.log(` Login Entering!`)}
-              // onExiting={() => console.log("Leaving")}
               >
                 {(state) => (<LoginDropDown toggleLoginDropDown={this.toggleLoginDropDown} toggleRegisterDropDown={this.toggleRegisterDropDown} />)}
               </CSSTransition>
@@ -99,20 +132,29 @@ class Nav extends Component {
                 classNames="fade"
                 mountOnEnter
                 unmountOnExit
-              // onExiting={()=>console.log(`register Exiting!`)}
-              // onEntering={()=>console.log(` Register Entering!`)}
               >
                 {(state) => (<LoginDropDown register={this.state.appearRegister} toggleLoginDropDown={this.toggleLoginDropDown} toggleRegisterDropDown={this.toggleRegisterDropDown} />)}
               </CSSTransition>
             </div>
             )}
         </div>
-      </div>);
+        <ReviewDropDown 
+          summonerName={this.props.summoner.summonerName} 
+          userId={this.props.user.user.id} 
+          disableUserReview={()=>this.setState({
+            showReviewForm: false
+          })}
+          showReviewForm={this.state.showReviewForm}
+          />
+      </div>
+      );
   }
 }
 
 const mapStateToProps = state => ({
-  user: state.user.user,
+  user: state.user,
+  summoner: state.summoner.summoner,
+  summonerDataDidLoad: state.summoner.isLoaded
 });
 
 export default withRouter(connect(mapStateToProps)(Nav));
