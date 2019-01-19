@@ -35,7 +35,6 @@
 
 .cell-close-detail{
     display: inline;
-    /* color: #20282f; */
     float: right;
     user-select: none;
     cursor: pointer;
