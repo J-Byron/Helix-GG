@@ -36,7 +36,7 @@ class ReviewDropDown extends Component {
             }
         })
 
-        this.props.toggleForm();
+        this.props.disableUserReview();
 
     }
 

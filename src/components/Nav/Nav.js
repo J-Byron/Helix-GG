@@ -141,7 +141,9 @@ class Nav extends Component {
         <ReviewDropDown 
           summonerName={this.props.summoner.summonerName} 
           userId={this.props.user.user.id} 
-          toggleForm={this.handleReviewPlayerClick}
+          disableUserReview={()=>this.setState({
+            showReviewForm: false
+          })}
           showReviewForm={this.state.showReviewForm}
           />
       </div>

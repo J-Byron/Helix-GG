@@ -1,5 +1,4 @@
 
-
 .reviewCell {
     width: 100%;
     background-color: rgb(12, 160, 170);
@@ -43,7 +42,7 @@
 }
 
 .cell-detail-edit {
-    transition: font-size .2s;
+    transition: all .2s;
 }
 
 .cell-detail-edit:hover {
@@ -51,7 +50,7 @@
 }
 
 .cell-detail-close{
-    transition: font-size .1s;
+    transition: all .2s;
     color: #171d21;
     font-size: 15px;
 }
@@ -63,7 +62,7 @@
 .cell-content{
     border-radius: 2px;
     padding: 2px 4px;
-    background-color: rgb(12, 160, 170);
+    background-color: transparent;
     border: 0px solid transparent;
 
     /* height: 10px; */
@@ -123,12 +122,9 @@
     text-align: center;
     font-size: 20px;
     letter-spacing: 10px;
+    cursor: pointer;
 }
 
-.cell-edit-right{
-    width: 50%;
-    margin: 5px 15px;
-}
 
 .cell-rating-Selected{
     color: #eeeeee;
@@ -136,9 +132,17 @@
     cursor: pointer;
 }
 
-.cell-rating{
-    cursor: pointer;
+
+.cell-rating:hover{
+    font-size: 27px;
+    transition: all .2s ;
 }
+
+.cell-edit-right{
+    width: 50%;
+    margin: 5px 15px;
+}
+
 
 .cell-button-container{
 
@@ -167,6 +171,10 @@
 
 }
 
+.cell-save-button:hover{
+    text-shadow: 0px 0px 3px #12a0aa;
+}
+
 .cell-save-button:active, .cell-delete-button:active{
     transform: translateY(2px);
 }
@@ -186,4 +194,8 @@
     color: #d12828;
     vertical-align: middle;
     line-height: 30px;
+}
+
+.cell-delete-button:hover{
+    text-shadow: 0px 0px 3px #d12828;
 }

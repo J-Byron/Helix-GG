@@ -10,8 +10,17 @@ import './ProfileFavoriteItem.css'
 class ProfileFavoriteItem extends Component{
     render(){
         return(
-            <div>
-                
+            <div className='favorite-cell'>
+                {/* {this.props.favorite} */}
+                <div className='favorite-icon' style={{backgroundImage: `url(${this.props.favorite.summoner_profile_icon})`}} />
+
+                <div className='favorite-summoner'>
+                    {this.props.favorite.summoner_Name}
+                </div>
+
+                <div className='favorite-remove'>
+                    Remove
+                </div>
             </div>
         );
     }
