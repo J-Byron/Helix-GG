@@ -104,7 +104,7 @@ router.get('/reviews/:summonerName',(req,res)=>{
     `SELECT "reviewed_summonerName", "User"."summoner_Name" ,"rating", "content" 
     FROM "Review" JOIN "User" ON "User"."id" = "Review"."reviewing_user_id"
     where UPPER("reviewed_summonerName") = UPPER($1)
-    ORDER BY "User"."id" DESC;`;
+    ORDER BY "Review"."id" DESC;`;
 
     //
     pool.query(queryString,[summonerName]).then(result=>{
@@ -307,9 +307,9 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
                                         averageCs: (queriedMatchParticipant.stats.totalMinionsKilled + queriedMatchParticipant.stats.neutralMinionsKilled),
                                     }
                                     
-                                    const championStats = championHistory[champions[summonerChampionId]];
+                                    const champStats = championHistory[champions[summonerChampionId]];
 
-                                    championStats.kdar = `${Number(((championStats.kills + championStats.assists)/ championStats.kills).toFixed(1))}:1`
+                                    champStats.kdar = `${Number(((champStats.kills + champStats.assists)/ champStats.deaths).toFixed(1))}:1`
 
                                 }
 
