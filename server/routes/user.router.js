@@ -61,13 +61,27 @@ router.post('/favorite', (req,res)=>{
 //
 router.get('/:id/favorites', (req,res) =>{
   const userId = req.params.id;
-  const queryString = `SELECT "summoner_Name","summoner_profile_icon" FROM "Favorite" where "user_id" = $1 ORDER BY "id" DESC;`;
+  const queryString = `SELECT "id","user_id","summoner_Name","summoner_profile_icon" FROM "Favorite" where "user_id" = $1 ORDER BY "id" DESC;`;
 
   pool.query(queryString, [userId]).then(result =>{
     res.send(result.rows);
   }).catch(err =>{
     console.log(`Error in  get ../user/id/favorites: ${err}`);
     res.sendStatus(500);
+  })
+})
+
+router.delete('/favorite/delete/:id',(req,res)=>{
+  //
+  const {id} = req.params;
+  
+  //
+  const queryString = 'DELETE FROM "Favorite" WHERE id=$1;';
+
+  pool.query(queryString,[id])
+  .then(result => res.sendStatus(204))
+  .catch(error=>{
+    console.log(`Error in /api/user/favorite/delete/:id: ${error}`);
   })
 })
 

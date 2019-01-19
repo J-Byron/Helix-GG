@@ -8,6 +8,18 @@ import { connect } from 'react-redux';
 import './ProfileFavoriteItem.css'
 
 class ProfileFavoriteItem extends Component{
+
+    handleDeleteClick = () =>{
+        // Dispatch Delete action
+        this.props.dispatch({
+            type:'DELETE_FAVORITE',
+            payload: {
+                id: this.props.favorite.id,
+                userId: this.props.favorite.user_id
+            }
+        })
+    }
+
     render(){
         return(
             <div className='favorite-cell'>
@@ -18,7 +30,7 @@ class ProfileFavoriteItem extends Component{
                     {this.props.favorite.summoner_Name}
                 </div>
 
-                <div className='favorite-remove'>
+                <div className='favorite-remove' onClick={this.handleDeleteClick}>
                     Remove
                 </div>
             </div>

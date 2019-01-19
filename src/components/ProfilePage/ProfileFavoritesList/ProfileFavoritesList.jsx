@@ -9,7 +9,7 @@ import './ProfileFavoritesList.css'
 
 const ProfileFavoritesList = (props) => {
     return(
-        <div>
+        <div className='profile-favorites-list'>
             {
                 props.favorites.map((favorite,index)=>{
                     return(<ProfileFavoriteItem key={index} favorite={favorite}/>)
