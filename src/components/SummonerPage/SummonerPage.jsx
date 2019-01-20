@@ -49,7 +49,7 @@ class SummonerPage extends Component{
                 {/*  */}
 
                 {/* Match History Component*/}
-                {/* <SummonerHistory/> */}
+                <SummonerHistory/>
             </div>
         )
     }

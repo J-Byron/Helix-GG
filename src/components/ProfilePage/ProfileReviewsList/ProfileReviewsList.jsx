@@ -1,5 +1,5 @@
 // *----------* CRA *----------*
-import React, { Component } from 'react';
+import React from 'react';
 
 // *----------* Components *----------*
 import ProfileReviewsItem from './ProfileReviewsItem/ProfileReviewsItem'
