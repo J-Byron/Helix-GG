@@ -24,7 +24,7 @@
 .review-content {
     z-index: 1;
     /* display: inline-block; */
-    margin-left: -90%;
+    margin-left: -100%;
     margin-top: 5px;
     font-family: 'Krungthep';
     font-size: 12px;
@@ -35,7 +35,7 @@
     vertical-align: middle;
     line-height: 60px;
     word-wrap: break-word;
-    width: 150px;
+    width: 175px;
     /* display: flex;
     flex-wrap: wrap;  */
     justify-content: center; 

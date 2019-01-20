@@ -16,31 +16,25 @@ class SummonerReviewComponent extends Component {
 
         return (
             <div>
-            <p className='recent-reviews'>
-                Recent Reviews
+                <p className='recent-reviews'>
+                    Recent Reviews
             </p>
-            <div className='review-container'>
-                    <TransitionGroup className='review-list'>
-                        {
-                            this.props.reviews.map((review, index) => (
+                <div className='review-container'>
+                    {(this.props.reviews.length == 0) ? (
+                        <div className='review-container-empty'>
+                            It's empty in here
+                        </div>
+                    ) : (
+                            <div>
+                                {this.props.reviews.map((review, index) => (
 
-                                <CSSTransition
-                                    appear={true}
-                                    // in={true}
-                                    key={index}
-                                    timeout={2000}
-                                    classNames='itemfade'
-                                    mountOnEnter
-                                    unmountOnExit
-                                    onEntered={()=>console.log('Entered')}
-                                >
                                     <ReviewListItem review={review} />
-                                </CSSTransition>
+                                ))
+                                }
+                            </div>
+                        )}
 
-                            ))
-                        }
-                    </TransitionGroup>
-            </div>
+                </div>
             </div>
         )
     }
