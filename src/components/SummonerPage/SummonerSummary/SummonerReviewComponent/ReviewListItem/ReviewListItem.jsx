@@ -27,7 +27,15 @@ class ReviewListItem extends Component {
             <div>
                 {
                     this.hasContent() ? (
-                        (<div className='review-cell'>
+                        (<div 
+                        className='review-cell'
+                        style={{
+                            backgroundColor: `${this.props.review.rating < 3 && '#ff2f64'}`,
+                            borderColor: `${this.props.review.rating < 3 && '#ff2f64'}`,
+                            boxShadow: `${this.props.review.rating < 3 && '0px 2px #7c1d35'}`
+                        }} 
+                        
+                        >
                             {/* Reviewer */}
 
                             <p className='reviewer-text'>
@@ -38,13 +46,6 @@ class ReviewListItem extends Component {
 
                             <div className='review-content'>
                                 {this.props.review.content}
-                            {/* "
-                                <em
-                                    style={{fontStyle: 'normal'}}
-                                >
-                                {this.props.review.content}
-                                </em>
-                            " */}
                             </div>
 
                             <div className={`cell-rating${this.props.review.rating}`}>

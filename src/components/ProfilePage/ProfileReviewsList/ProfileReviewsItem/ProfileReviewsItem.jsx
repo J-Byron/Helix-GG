@@ -82,7 +82,7 @@ class ProfileReviewsItem extends Component {
             itemRating: rating
         })
 
-        // console.log('Rating set to', this.state.rating);
+        console.log('Rating set to', this.state.itemRating);
         
     }
 
@@ -95,8 +95,13 @@ class ProfileReviewsItem extends Component {
 
     render() {
 
-        const cell = (
-            <div className={`reviewCell ${this.state.detailIsVisible ? 'cell-open' : 'cell-closed'}`}>
+        let cell = (
+            <div className={`reviewCell ${this.state.detailIsVisible ? 'cell-open' : 'cell-closed'}`}
+                style={{
+                    backgroundColor: `${(this.state.itemRating < 3) ? ('#ff2f64') : ('rgb(12, 160, 170)')}`,
+                    boxShadow: `${(this.state.itemRating < 3) ? ('0px 2px #7c1d35') : (' 0px 2px #006368')}`
+                }}
+            >
                 <div className='cell-header'>
                     {/* Summoner who user reviewed */}
                     <div className='cell-summoner'>

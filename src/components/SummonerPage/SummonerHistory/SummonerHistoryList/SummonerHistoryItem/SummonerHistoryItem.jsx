@@ -37,7 +37,7 @@ time: "28m 39s"
 
 const SummonerHistoryItem = props => {
 
-    const { champion, cs, kda, matchParticipants, result, runes, spells, time } = props.match;
+    const { champion, cs, items, kda, matchParticipants, result, runes, spells, time } = props.match;
     console.log(props);
 
     return (
@@ -91,27 +91,121 @@ const SummonerHistoryItem = props => {
             </div>
 
             {/* KDA */}
-            <div className='match-kda-container' style={{ display: 'flex', flexDirection: 'column', fontFamily:'Krungthep'}}>
+            {/* JSS Practice */}
+            <div
+                className='match-kda-container'
+                style={{
+                    display: 'flex',
+                    margin: 'auto 5% auto 5%',
+                    flexDirection: 'column',
+                    fontFamily: 'Krungthep',
+                    textAlign: 'center',
+                    fontSize: '13px',
+                    color: '#eee',
+                    verticalAlign: 'middle',
+                }}>
 
                 {/*  kdar */}
                 <div>
-                    {kda.kdar}
+                    {`${kda.kdar} KDA`}
                 </div>
 
                 {/*  k/d/a */}
-                <div>
-                    <div>
-                        {`${kda.kills} / `}
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    fontSize: '12px',
+                    textAlign: 'center',
+                    justifyContent: 'center',
+                    letterSpacing: '2px'
+                }}>
+                    <div style={{ color: '#00adb5' }}>
+                        {`${kda.kills} `}
                     </div>
-
-                    <div>
-                        {`${kda.deaths} / `}
+                    {" / "}
+                    <div style={{ color: '#ff2e63' }}>
+                        {` ${kda.deaths} `}
                     </div>
-
+                    {" / "}
                     <div>
-                        {`${kda.assists} / `}
+                        {` ${kda.assists}`}
                     </div>
                 </div>
+
+                <div style={{
+                    fontSize: '10px',
+                    color: '#eeeeee91'
+                }}>
+                    {`${cs} cs`}
+                </div>
+
+            </div>
+
+            {/* Items */}
+
+            <div style={{
+                display: 'flex',
+                flexDirection: 'row',
+                width: '125px',
+                height: '60px',
+                margin: '15px 25px 15px auto',
+                justifyContent: 'center',
+                verticalAlign: 'middle'
+            }}>
+
+                {/* Items */}
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'column'
+                }}>
+                    {/* 0-2 */}
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                    }}>
+
+                        <div className='match-item-icon' style={{
+                            backgroundImage: `url(${items[0]})`,
+                        }} />
+
+                        <div className='match-item-icon' style={{
+                            backgroundImage: `url(${items[1]})`,
+                        }} />
+
+                        <div className='match-item-icon' style={{
+                            backgroundImage: `url(${items[2]})`,
+                        }} />
+
+                    </div>
+
+                    {/* 3-5 */}
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        margin: '3.33px 0px;'
+                    }}>
+
+                        <div className='match-item-icon' style={{
+                            backgroundImage: `url(${items[3]})`,
+                        }} />
+
+                        <div className='match-item-icon' style={{
+                            backgroundImage: `url(${items[4]})`,
+                        }} />
+
+                        <div className='match-item-icon' style={{
+                            backgroundImage: `url(${items[5]})`,
+                        }} />
+
+
+                    </div>
+                </div>
+
+                {/* Ward */}
+                <div className='match-item-icon' style={{
+                    backgroundImage: `url(${items[6]})`,
+                    margin: 'auto 2px'
+                }} />
 
             </div>
         </div>
