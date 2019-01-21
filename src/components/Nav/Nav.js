@@ -74,7 +74,7 @@ class Nav extends Component {
 
     // console.log(`DID REVIEW = ${didReview}`);
     // console.log(this.props.summoner.summonerName, this.props.user.user.summoner_Name);
-    // console.log(this.props.user.user.id,!didReview,this.props.summoner.summonerName != this.props.user.user.summoner_Name,this.props.summonerDataDidLoad);
+    console.log(this.props.user.user.id,!didReview,this.props.summoner.summonerName != this.props.user.user.summoner_Name,this.props.summonerDataDidLoad);
 
 
     if (this.props.user.user.id && !didReview && (this.props.summoner.summonerName != this.props.user.user.summoner_Name) && this.props.summonerDataDidLoad) {

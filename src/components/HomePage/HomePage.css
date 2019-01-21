@@ -6,8 +6,8 @@
     color: #00adb5;
     display: inline-block;
     font-family: 'Krungthep';
-    font-size: 9vw;
-    margin: 200px 25% 0px 25%;
+    font-size: 100px;
+    margin: 225px 25% 0px 25%;
     text-align: center;
     width: 50%;
     user-select: none;
@@ -22,8 +22,8 @@
 
 .searchBar {
     height: 50px;
-    margin: 20px 25% 0px 25%;
-    width: 50%;
+    margin: 20px 30% 0px 30%;
+    width: 40%;
     border-radius: 3px;
     background-color: #ffffff;
     display: flex;
@@ -141,15 +141,15 @@
     margin: 3rem 0.2rem;
     background: #0CA5B0;
     border-radius: 50%;
-    animation: bouncing-loader .8s infinite alternate;
+    animation: bouncing-loader .6s infinite alternate;
   }
   .bouncing-loader > div:nth-child(2) {
     z-index: 1;
-    animation-delay: 0.3s;
+    animation-delay: 0.2s;
   }
   .bouncing-loader > div:nth-child(3) {
     z-index: 1;
-    animation-delay: 0.6s;
+    animation-delay: 0.4s;
   }
 
   @keyframes bouncing-loader-white {

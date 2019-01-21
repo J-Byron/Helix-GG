@@ -30,9 +30,9 @@ class ReviewListItem extends Component {
                         (<div 
                         className='review-cell'
                         style={{
-                            backgroundColor: `${this.props.review.rating < 3 && '#ff2f64'}`,
-                            borderColor: `${this.props.review.rating < 3 && '#ff2f64'}`,
-                            boxShadow: `${this.props.review.rating < 3 && '0px 2px #7c1d35'}`
+                            backgroundColor: `${(this.props.review.rating < 3) ? ('#f83c6c'):('#00adb5')}`,
+                            borderColor: `${(this.props.review.rating < 3) ?  ('#f83c6c') : ('#00adb5')}`,
+                            boxShadow: `${(this.props.review.rating < 3) ? ('0px 2px #7c1d35') : ('0px 2px #006368')}`
                         }} 
                         
                         >
