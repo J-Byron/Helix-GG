@@ -28,7 +28,7 @@ class SummonerReviewComponent extends Component {
                             <div>
                                 {this.props.reviews.map((review, index) => (
 
-                                    <ReviewListItem review={review} />
+                                    <ReviewListItem key={index} review={review} />
                                 ))
                                 }
                             </div>

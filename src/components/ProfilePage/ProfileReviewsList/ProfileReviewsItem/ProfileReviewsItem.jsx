@@ -99,7 +99,8 @@ class ProfileReviewsItem extends Component {
             <div className={`reviewCell ${this.state.detailIsVisible ? 'cell-open' : 'cell-closed'}`}
                 style={{
                     backgroundColor: `${(this.state.itemRating < 3) ? ('#ff2f64') : ('rgb(12, 160, 170)')}`,
-                    boxShadow: `${(this.state.itemRating < 3) ? ('0px 2px #7c1d35') : (' 0px 2px #006368')}`
+                    boxShadow: `${(this.state.itemRating < 3) ? ('0px 2px #7c1d35') : (' 0px 2px #006368')}`,
+                    transition: 'all .2s'
                 }}
             >
                 <div className='cell-header'>
