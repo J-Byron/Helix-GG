@@ -3,7 +3,7 @@
 .dropDownMenu {
     width: 250px;
     height: 200px;
-    background-color: #393e46;
+    background-color: #262f38;
     position: absolute;
     right:30px;
     top: 55px;
@@ -13,7 +13,7 @@
 .dropDownMenu-register{
     width: 250px;
     height: 250px;
-    background-color: #393e46;
+    background-color: #262f38;
     position: absolute;
     right:30px;
     top: 55px;
