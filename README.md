@@ -1,13 +1,21 @@
-# Prime Project
-This version uses React, Redux, Express, Passport, and PostgreSQL (a full list of dependencies can be found in `package.json`).
+# Helix.GG
 
-We **STRONGLY** recommend following these instructions carefully. It's a lot, and will take some time to set up, but your life will be much easier this way in the long run.
+Helix.GG is a companion application for [league of legends](https://na.leagueoflegends.com/en/) that allows users to search for other players and 
+view statistics and reviews left by other players.
 
-## Download (Don't Clone) This Repository
+## Built with
 
-* Don't Fork or Clone. Instead, click the `Clone or Download` button and select `Download Zip`.
-* Unzip the project and start with the code in that folder.
-* Create a new GitHub project and push this code to the new repository.
+* javaScript
+* Node
+* React
+* React-redux
+* redux-saga
+* Passport
+* Express
+* SQL
+* CSS3
+* HTML5
+* Nivo (D3)
 
 ## Prerequisites
 
@@ -17,21 +25,39 @@ Before you get started, make sure you have the following software installed on y
 - [PostrgeSQL](https://www.postgresql.org/)
 - [Nodemon](https://nodemon.io/)
 
-## Create database and table
+## Installing
 
-Create a new database called `prime_app` and create a `person` table:
+Create a new database called `helix` and create the following tables:
 
 ```SQL
-CREATE TABLE "person" (
+
+CREATE TABLE "User" (
     "id" SERIAL PRIMARY KEY,
-    "username" VARCHAR (80) UNIQUE NOT NULL,
-    "password" VARCHAR (1000) NOT NULL
+    "username" VARCHAR (255) UNIQUE NOT NULL,
+    "password" VARCHAR (255) NOT NULL,
+    "summoner_Name" VARCHAR(255),
+    "profile_icon" VARCHAR(255),
+    "email_address" VARCHAR(255)
 );
+
+CREATE TABLE "Review" (
+    "id" SERIAL PRIMARY KEY,
+    "reviewed_summonerName" VARCHAR(255) NOT NULL,
+    "reviewing_user_id" INT REFERENCES "User" NOT NULL,
+    "rating" INT NOT NULL,
+    "content" VARCHAR(160) -- Could be null if user just wants to leave a rating
+);
+
+CREATE TABLE "Favorite" (
+    "id" SERIAL PRIMARY KEY,
+    "summoner_Name" VARCHAR(255) NOT NULL,
+    "user_id" INT REFERENCES "User",
+    "summoner_profile_icon" VARCHAR(255)
+);
+
 ```
 
-If you would like to name your database something else, you will need to change `prime_app` to the name of your new database name in `server/modules/pool.js`
-
-## Development Setup Instructions
+If you would like to name your database something else, you will need to change `helix` to the name of your new database name in `server/modules/pool.js`
 
 * Run `npm install`
 * Create a `.env` file at the root of the project and paste this line into the file:
@@ -39,21 +65,73 @@ If you would like to name your database something else, you will need to change 
     SERVER_SESSION_SECRET=superDuperSecret
     ```
     While you're in your new `.env` file, take the time to replace `superDuperSecret` with some long random string like `25POUbVtx6RKVNWszd9ERB9Bb6` to keep your application secure. Here's a site that can help you: [https://passwordsgenerator.net/](https://passwordsgenerator.net/). If you don't do this step, create a secret with less than eight characters, or leave it as `superDuperSecret`, you will get a warning.
+
+* Signup for a riot games [api key](https://developer.riotgames.com/) and paste this line into your `.env` file
+    ```
+    API_KEY= <your api key>
+    ```
+
 * Start postgres if not running already by using `brew services start postgresql`
 * Run `npm run server`
 * Run `npm run client`
 * Navigate to `localhost:3000`
 
-## Debugging
+## Screenshots
 
-To debug, you will need to run the client-side separately from the server. Start the client by running the command `npm run client`. Start the debugging server by selecting the Debug button.
+<img src="screenshots/Screen Shot 2019-01-22 at 2.26.54 PM.png" width=100%>
 
-![VSCode Toolbar](documentation/images/vscode-toolbar.png)
+<img src="screenshots/Screen Shot 2019-01-22 at 2.29.18 PM.png" width=100%>
 
-Then make sure `Launch Program` is selected from the dropdown, then click the green play arrow.
+<img src="screenshots/Screen Shot 2019-01-22 at 2.30.04 PM.png" width=100%>
 
-![VSCode Debug Bar](documentation/images/vscode-debug-bar.png)
 
+## Documentation
+
+Link to the scoping document for this project can be found [here](https://docs.google.com/document/d/1XGW9mQGWjWU5vHliDaz_XBNMuAl59HCbc_YlSpO7PJk/edit?usp=sharing).
+
+## Completed features
+
+- [x] Home Page UI
+- [x] Routes
+- [x] Search bar 
+- [x] Summoner Profile
+- [x] Summoner profile reviews
+- [x] Summoner profile create review
+- [x] Favorite summoner
+- [x] Summoner Profile analytics
+- [x] Summoner Profile recent champs analytics
+- [x] Summoner Profile match history
+- [x] User login and authorization
+- [x] User registration
+- [x] Summoner / User reviews
+- [x] Profile Page
+- [x] Display/Edit/Delete user reviews
+- [x] Display/Delete favorites
+- [x] UI Transitions
+
+
+## Next Steps
+
+Here are some features I plan on implementing in the near future
+
+- [ ] Additional detail to profile summary
+- [ ] Table row on mount transitions
+- [ ] Page lifecycle animations
+- [ ] Refractor searching to allow 20+ searchs in parallel 
+- [ ] Refractor searching to be made on click of summoner name
+- [ ] Search bar visible on all pages
+- [ ] Display chart of summoner's ratings
+- [ ] Migrate to mobile
+- [ ] Account verification (?)
+- [ ] Email verification
+- [ ] Success/error notifications & snackbars & 
+- [ ] Comprehensive overhaul of analytics
+- [ ] Champion Wallpaper
+- [ ] Update animation / color scheme / layout to be more user friendly 
+
+## Authors
+
+- Josh Byron
 
 ## Production Build
 
@@ -63,29 +141,6 @@ Before pushing to Heroku, run `npm run build` in terminal. This will create a bu
 * Run `npm start`
 * Navigate to `localhost:5000`
 
-## Lay of the Land
-
-* `src/` contains the React application
-* `public/` contains static assets for the client-side
-* `build/` after you build the project, contains the transpiled code from `src/` and `public/` that will be viewed on the production site
-* `server/` contains the Express App
-
-This code is also heavily commented. We recommend reading through the comments, getting a lay of the land, and becoming comfortable with how the code works before you start making too many changes. If you're wondering where to start, consider reading through component file comments in the following order:
-
-* src/components
-  * App/App
-  * Footer/Footer
-  * Nav/Nav
-  * AboutPage/AboutPage
-  * InfoPage/InfoPage
-  * UserPage/UserPage
-  * LoginPage/LoginPage
-  * RegisterPage/RegisterPage
-  * LogOutButton/LogOutButton
-  * ProtectedRoute/ProtectedRoute
-
-## Deployment
-
 1. Create a new Heroku project
 1. Link the Heroku project to the project GitHub Repo
 1. Create an Heroku Postgres database
@@ -93,7 +148,3 @@ This code is also heavily commented. We recommend reading through the comments, 
 1. Create the necessary tables
 1. Add an environment variable for `SERVER_SESSION_SECRET` with a nice random string for security
 1. In the deploy section, select manual deploy
-
-## Update Documentation
-
-Customize this ReadMe and the code comments in this project to read less like a starter repo and more like a project. Here is an example: https://gist.github.com/PurpleBooth/109311bb0361f32d87a2
