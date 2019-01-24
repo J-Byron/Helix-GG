@@ -7,13 +7,14 @@ require('dotenv').config();
 
 // *----------* Environment variables *----------*
 const API_KEY = process.env.API_KEY; // riot games API key
-const D_VERSION = process.env.DDRAGON_VERSION; // ddragon version
+const D_VERSION = '9.1.1'; // ddragon version
 
 /* 
 
         -Notes-
             * Converting IDs to Names @ http://ddragonexplorer.com/cdn/8.24.1/data/en_US/
             * Images @ https://ddragonexplorer.com/cdn/
+            * 
             * replace http://ddragonexplorer.com/ with https://ddragon.leagueoflegends.com/
 
         -Queue Types-
