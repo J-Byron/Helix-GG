@@ -207,7 +207,7 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
         summonerIDs.puuid = response.data.puuid;
 
         // Query ranked solo queue match history
-        axios.get(`https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/${summonerIDs.accountId}?queue=${queueType}&endIndex=5&beginIndex=0&api_key=${API_KEY}`)
+        axios.get(`https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/${summonerIDs.accountId}?queue=${queueType}&endIndex=7&beginIndex=0&api_key=${API_KEY}`)
             .then(response => {
 
                 // Keeps track of all champions played across queried matchlist
@@ -246,18 +246,21 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
 
                                 // find summoner participant id 
                                 for (let participant of matchaResponseData.participantIdentities) {
-
+                                    console.log(participant.player.summonerName);
                                     if (summonerName.toUpperCase() === participant.player.summonerName.toUpperCase()) {
                                         // Need image for: 1 champion, 2 spells, 2 runes, 7 items, 10 players = 22 api requests
 
+                                        // console.log(`FOUND!`);
                                         // Get the matchParticipant id of the queried summoner in particular match
                                         queriedMatchParticipant = matchaResponseData.participants[participant.participantId - 1];
                                         break;
                                     }
                                 }
 
+                                // console.log(queriedMatchParticipant);
                                 // Champion *ddragonexplorer.com/cdn/8.24.1/img/champion/{}.png*
                                 const summonerChampionId = queriedMatchParticipant.championId;
+                                
                                 matchInformation.champion = { name: champions[summonerChampionId], icon: `http://ddragon.leagueoflegends.com/cdn/${D_VERSION}/img/champion/${champions[summonerChampionId]}.png` };
 
                                 // If Champion already exists in champion history, 

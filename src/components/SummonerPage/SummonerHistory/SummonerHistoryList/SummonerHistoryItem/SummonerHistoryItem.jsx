@@ -182,7 +182,7 @@ const SummonerHistoryItem = props => {
                     <div style={{
                         display: 'flex',
                         flexDirection: 'row',
-                        margin: '3.33px 0px;'
+                        margin: '3.33px 0px'
                     }}>
 
                         <div className='match-item-icon' style={{
