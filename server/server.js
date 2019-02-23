@@ -10,7 +10,7 @@ const passport = require('./strategies/user.strategy');
 
 // Route includes
 const userRouter = require('./routes/user.router');
-const summonerRouter = require('./routes/summoner.router')
+const summonerRouter = require('./routes/summoner.router2')
 
 // Body parser middleware
 app.use(bodyParser.json());

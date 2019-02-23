@@ -11,22 +11,20 @@ function* fetchSummoner(action) {
 
         // Reset Data
         yield dispatch({type:'RESET_DATA'})
-        // yield dispatch({ type: 'SET_SUMMONER', payload: {}})
-        // yield dispatch({ type: 'SET_SUMMONER_HISTORY', payload: {}})
 
         // Prepare data for request
         const summonerName = action.payload.summonerName;
         const region = action.payload.region;
 
         // Request sent to summoner API to query riot games API with summoner name
-        const summonerResponseData = yield axios.get(`/api/summoner/${region}/${summonerName}`);
+        const { data : summonerResponseData} = yield axios.get(`/api/summoner/${region}/${summonerName}`);
 
         // Fetch reviews about summoner
         yield dispatch({type:'FETCH_SUMMONER_REVIEWS', payload: summonerName})
 
         // Also dispatch action to FETCH_SUMMONER_HISTORY.
         // This will in turn dispatch history results to summonerReducer
-        yield dispatch(
+        yield dispatch (
             {
             type:'FETCH_SUMMONER_HISTORY',
             payload:{
@@ -36,11 +34,12 @@ function* fetchSummoner(action) {
                 // history: action.payload.history
                 },
             history: action.history
-            })
+            }
+        )
 
 
         // Dispatch returned summoner to summonerReducer
-        yield dispatch({ type: 'SET_SUMMONER', payload: summonerResponseData.data })
+        yield dispatch({ type: 'SET_SUMMONER', payload: summonerResponseData })
         
     } catch (error) {
         console.log(`Summoner get request failed:`, error);
@@ -57,10 +56,10 @@ function* fetchSummonerHistory(action) {
         const queueType = action.payload.queueType
 
         // Request server to query riot games API with summoner name from client
-        const summonerHistoryResponse = yield axios.get(`/api/summoner/${region}/${summonerName}/${queueType}`)
+        const { data : summonerHistoryResponse} = yield axios.get(`/api/summoner/${region}/${summonerName}/${queueType}`)
 
         // Dispatch returned summoner to summonerReducer
-        yield dispatch({ type: 'SET_SUMMONER_HISTORY', payload: summonerHistoryResponse.data })
+        yield dispatch({ type: 'SET_SUMMONER_HISTORY', payload: summonerHistoryResponse })
 
         //
         yield action.history.push(`/search/summonerName=${summonerName}`);
@@ -79,10 +78,10 @@ try {
     console.log(summonerName);
 
     // Make request to API to fetch all reviews of summoner
-    const reviewsResponse = yield axios.get(`/api/summoner/reviews/${summonerName}`);
+    const { data : reviewsResponse } = yield axios.get(`/api/summoner/reviews/${summonerName}`);
 
     // 
-    yield dispatch({type:'SET_SUMMONER_REVIEWS', payload: reviewsResponse.data})
+    yield dispatch({type:'SET_SUMMONER_REVIEWS', payload: reviewsResponse})
 
 } catch (error) {
     
