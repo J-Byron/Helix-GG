@@ -244,9 +244,10 @@ router.get('/:region/:summonerName/:queue', (req, res) => {
                         // Handle each request 
                         responses.forEach((match, i) => {
 
-                            // 
                             const { data: matchData } = match;
                             console.log(`${matchData.gameId}[${i}] Succesfully loaded`);
+
+                            // console.log(matchData);
 
                             // Queried summoner's identity in match
                             let queriedMatchParticipant;
